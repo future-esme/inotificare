@@ -15,6 +15,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
 import utm.md.service.UserService;
 import utm.md.service.dto.UserDTO;
+import utm.md.service.telegram.SendTelegramNotificationService;
 
 @RestController
 @RequestMapping("/api")
@@ -27,9 +28,11 @@ public class PublicUserResource {
     private final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
 
     private final UserService userService;
+    private final SendTelegramNotificationService telegramNotificationService;
 
-    public PublicUserResource(UserService userService) {
+    public PublicUserResource(UserService userService, SendTelegramNotificationService telegramNotificationService) {
         this.userService = userService;
+        this.telegramNotificationService = telegramNotificationService;
     }
 
     /**
@@ -61,5 +64,11 @@ public class PublicUserResource {
     @GetMapping("/authorities")
     public List<String> getAuthorities() {
         return userService.getAuthorities();
+    }
+
+    @GetMapping("/send")
+    public ResponseEntity<Void> sendNotification() {
+        telegramNotificationService.sendTestNotification();
+        return ResponseEntity.ok().build();
     }
 }

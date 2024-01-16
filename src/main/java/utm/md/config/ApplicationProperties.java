@@ -1,5 +1,6 @@
 package utm.md.config;
 
+import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
@@ -10,7 +11,40 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  */
 @ConfigurationProperties(prefix = "application", ignoreUnknownFields = false)
 public class ApplicationProperties {
-    // jhipster-needle-application-properties-property
-    // jhipster-needle-application-properties-property-getter
-    // jhipster-needle-application-properties-property-class
+
+    @NotNull
+    private Tokens tokens;
+
+    public Tokens getTokens() {
+        return tokens;
+    }
+
+    public void setTokens(Tokens tokens) {
+        this.tokens = tokens;
+    }
+
+    public static class Tokens {
+
+        @NotNull
+        private String telegram;
+
+        @NotNull
+        private String viber;
+
+        public String getTelegram() {
+            return telegram;
+        }
+
+        public void setTelegram(String telegram) {
+            this.telegram = telegram;
+        }
+
+        public String getViber() {
+            return viber;
+        }
+
+        public void setViber(String viber) {
+            this.viber = viber;
+        }
+    }
 }

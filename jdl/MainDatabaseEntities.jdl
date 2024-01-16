@@ -1,0 +1,76 @@
+entity Authority {
+}
+
+entity User {
+}
+
+entity Template {
+    id UUID,
+    title String required,
+    language Language required,
+    channel Channel required,
+    content String,
+    shortContent String
+}
+
+entity RequestData {
+    id UUID,
+    channel Channel required,
+    recipient String,
+    priority Priority,
+    content String,
+    messageStatus MessageStatus required,
+    createdTime Instant required
+}
+
+entity Notification {
+    id UUID,
+    //requestId RequestData,
+    //recipient
+    content String,
+    status MessageStatus,
+    //channel ChannelUserCredentials
+}
+
+entity Department {
+    id UUID,
+    title String required,
+    //departmentAdmin User,
+}
+
+entity NotifyRules {
+    id UUID
+}
+
+enum Channel {
+    DEFAULT,
+    EMAIL,
+    TELEGRAM,
+    VIBER,
+    FACEBOOK
+}
+
+enum Priority {
+    LOW,
+    MEDIUM,
+    HIGH
+}
+
+enum MessageStatus {
+    UNPROCESSED,
+    PROCESSED,
+    PENDING,
+    SENT
+}
+
+enum Language {
+    RO,
+    RU,
+    EN
+}
+
+entity ChannelUserCredentials {
+    password String,
+    channel Channel
+}
+//recipient type, request data nu are canal, entitate utilizator_departament
