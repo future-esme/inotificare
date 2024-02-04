@@ -1,22 +1,25 @@
-entity Authority {
-}
-
 entity User {
 }
 
 entity Template {
     id UUID,
     title String required,
-    language Language required,
-    channel Channel required,
-    content String,
-    shortContent String
+    bodyRo String,
+    bodyRu String,
+    bodyEn String,
+    bodyShortRo String,
+    bodyShortRu String,
+    bodyShortEn String,
+    subjectRo String,
+    subjectRu String,
+    subjectEn String
 }
 
 entity RequestData {
     id UUID,
     channel Channel required,
-    recipient String,
+    recipients String,
+    recipientType RecipientType,
     priority Priority,
     content String,
     messageStatus MessageStatus required,
@@ -25,21 +28,34 @@ entity RequestData {
 
 entity Notification {
     id UUID,
-    //requestId RequestData,
-    //recipient
     content String,
-    status MessageStatus,
-    //channel ChannelUserCredentials
+    status MessageStatus
 }
 
 entity Department {
     id UUID,
-    title String required,
-    //departmentAdmin User,
+    title String required
 }
 
-entity NotifyRules {
-    id UUID
+entity NotifySettings {
+    id UUID,
+    channel Channel,
+    status NotifyChannelStatusEnum
+}
+
+entity ViberSubscriptions {
+    id UUID,
+    userId String required,
+    userName String required,
+    status ViberSubscriptionStatus,
+    createdTime Instant,
+    lastUpdatedTime Instant
+}
+
+enum ViberSubscriptionStatus {
+    WAITING,
+    SUBSCRIBED,
+    UNSUBSCRIBED
 }
 
 enum Channel {
@@ -63,14 +79,34 @@ enum MessageStatus {
     SENT
 }
 
-enum Language {
-    RO,
-    RU,
-    EN
-}
-
 entity ChannelUserCredentials {
-    password String,
+    chatId String,
     channel Channel
 }
-//recipient type, request data nu are canal, entitate utilizator_departament
+
+enum  NotifyChannelStatusEnum {
+    ON,
+    OFF
+}
+
+enum RecipientType {
+    USER,
+    DEPARTMENT
+}
+
+relationship OneToOne {
+    RequestData{templateId} to Template,
+    Department{departmentAdmin} to User
+    Notification{recipient} to User,
+    Notification{requestId} to RequestData,
+    Notification{channel} to ChannelUserCredentials{chatId},
+    NotifySettings{credentials} to ChannelUserCredentials{chatId}
+}
+
+relationship OneToMany {
+    User{notifySettings} to NotifySettings
+}
+
+relationship ManyToMany {
+    User{departments} to Department
+}
