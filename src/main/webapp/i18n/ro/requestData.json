@@ -1,0 +1,32 @@
+{
+  "inotificareApp": {
+    "requestData": {
+      "home": {
+        "title": "Request Data",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Request Data",
+        "createOrEditLabel": "Creeare sau editare Request Data",
+        "notFound": "No Request Data found"
+      },
+      "created": "A fost creată o nouă entitate Request Data cu identificatorul {{ param }}",
+      "updated": "Request Data cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Request Data cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Request Data {{ id }}?"
+      },
+      "detail": {
+        "title": "Request Data"
+      },
+      "id": "Id",
+      "channel": "Channel",
+      "recipients": "Recipients",
+      "recipientType": "Recipient Type",
+      "priority": "Priority",
+      "content": "Content",
+      "messageStatus": "Message Status",
+      "createdTime": "Created Time",
+      "templateId": "Template Id",
+      "notification": "Notification"
+    }
+  }
+}

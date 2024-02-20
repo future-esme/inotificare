@@ -1,0 +1,27 @@
+{
+  "inotificareApp": {
+    "userInternal": {
+      "home": {
+        "title": "User Internals",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый User Internal",
+        "createOrEditLabel": "Создать или отредактировать User Internal",
+        "notFound": "User Internals не найдено"
+      },
+      "created": "Новый User Internal создан с идентификатором {{ param }}",
+      "updated": "User Internal обновлен с идентификатором {{ param }}",
+      "deleted": "User Internal удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить User Internal {{ id }}?"
+      },
+      "detail": {
+        "title": "User Internal"
+      },
+      "id": "Id",
+      "notifySettings": "Notify Settings",
+      "notification": "Notification",
+      "department": "Department",
+      "department": "Department"
+    }
+  }
+}

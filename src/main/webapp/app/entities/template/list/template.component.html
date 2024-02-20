@@ -1,0 +1,179 @@
+<div>
+  <h2 id="page-heading" data-cy="TemplateHeading">
+    <span jhiTranslate="inotificareApp.template.home.title">Templates</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span jhiTranslate="inotificareApp.template.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-template"
+        [routerLink]="['/template/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="inotificareApp.template.home.createLabel">Create a new Template</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
+
+  @if (templates?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="inotificareApp.template.home.notFound">No Templates found</span>
+    </div>
+  }
+
+  @if (templates && templates.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.id">Id</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="title">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.title">Title</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bodyRo">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.bodyRo">Body Ro</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bodyRu">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.bodyRu">Body Ru</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bodyEn">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.bodyEn">Body En</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bodyShortRo">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.bodyShortRo">Body Short Ro</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bodyShortRu">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.bodyShortRu">Body Short Ru</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="bodyShortEn">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.bodyShortEn">Body Short En</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="subjectRo">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.subjectRo">Subject Ro</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="subjectRu">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.subjectRu">Subject Ru</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="subjectEn">
+              <div class="d-flex">
+                <span jhiTranslate="inotificareApp.template.subjectEn">Subject En</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (template of templates; track trackId) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/template', template.id, 'view']">{{ template.id }}</a>
+              </td>
+              <td>{{ template.title }}</td>
+              <td>{{ template.bodyRo }}</td>
+              <td>{{ template.bodyRu }}</td>
+              <td>{{ template.bodyEn }}</td>
+              <td>{{ template.bodyShortRo }}</td>
+              <td>{{ template.bodyShortRu }}</td>
+              <td>{{ template.bodyShortEn }}</td>
+              <td>{{ template.subjectRo }}</td>
+              <td>{{ template.subjectRu }}</td>
+              <td>{{ template.subjectEn }}</td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/template', template.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
+                  </a>
+
+                  <a [routerLink]="['/template', template.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(template)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (templates && templates.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

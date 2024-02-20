@@ -1,0 +1,168 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-request-data-heading"
+        data-cy="RequestDataCreateUpdateHeading"
+        jhiTranslate="inotificareApp.requestData.home.createOrEditLabel"
+      >
+        Create or edit a Request Data
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="inotificareApp.requestData.id" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.requestData.channel" for="field_channel">Channel</label>
+          <select class="form-control" name="channel" formControlName="channel" id="field_channel" data-cy="channel">
+            <option [ngValue]="null">{{ 'inotificareApp.Channel.null' | translate }}</option>
+            @for (channel of channelValues; track $index) {
+              <option [value]="channel">{{ 'inotificareApp.Channel.' + channel | translate }}</option>
+            }
+          </select>
+          @if (editForm.get('channel')!.invalid && (editForm.get('channel')!.dirty || editForm.get('channel')!.touched)) {
+            <div>
+              @if (editForm.get('channel')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.requestData.recipients" for="field_recipients">Recipients</label>
+          <input
+            type="text"
+            class="form-control"
+            name="recipients"
+            id="field_recipients"
+            data-cy="recipients"
+            formControlName="recipients"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.requestData.recipientType" for="field_recipientType">Recipient Type</label>
+          <select
+            class="form-control"
+            name="recipientType"
+            formControlName="recipientType"
+            id="field_recipientType"
+            data-cy="recipientType"
+          >
+            <option [ngValue]="null">{{ 'inotificareApp.RecipientType.null' | translate }}</option>
+            @for (recipientType of recipientTypeValues; track $index) {
+              <option [value]="recipientType">{{ 'inotificareApp.RecipientType.' + recipientType | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.requestData.priority" for="field_priority">Priority</label>
+          <select class="form-control" name="priority" formControlName="priority" id="field_priority" data-cy="priority">
+            <option [ngValue]="null">{{ 'inotificareApp.Priority.null' | translate }}</option>
+            @for (priority of priorityValues; track $index) {
+              <option [value]="priority">{{ 'inotificareApp.Priority.' + priority | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.requestData.content" for="field_content">Content</label>
+          <input type="text" class="form-control" name="content" id="field_content" data-cy="content" formControlName="content" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.requestData.messageStatus" for="field_messageStatus">Message Status</label>
+          <select
+            class="form-control"
+            name="messageStatus"
+            formControlName="messageStatus"
+            id="field_messageStatus"
+            data-cy="messageStatus"
+          >
+            <option [ngValue]="null">{{ 'inotificareApp.MessageStatus.null' | translate }}</option>
+            @for (messageStatus of messageStatusValues; track $index) {
+              <option [value]="messageStatus">{{ 'inotificareApp.MessageStatus.' + messageStatus | translate }}</option>
+            }
+          </select>
+          @if (editForm.get('messageStatus')!.invalid && (editForm.get('messageStatus')!.dirty || editForm.get('messageStatus')!.touched)) {
+            <div>
+              @if (editForm.get('messageStatus')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.requestData.createdTime" for="field_createdTime">Created Time</label>
+          <div class="d-flex">
+            <input
+              id="field_createdTime"
+              data-cy="createdTime"
+              type="datetime-local"
+              class="form-control"
+              name="createdTime"
+              formControlName="createdTime"
+              placeholder="YYYY-MM-DD HH:mm"
+            />
+          </div>
+          @if (editForm.get('createdTime')!.invalid && (editForm.get('createdTime')!.dirty || editForm.get('createdTime')!.touched)) {
+            <div>
+              @if (editForm.get('createdTime')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('createdTime')?.errors?.datetimelocal"
+                jhiTranslate="entity.validation.datetimelocal"
+                >This field should be a date and time.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.requestData.templateId" for="field_templateId">Template Id</label>
+          <select
+            class="form-control"
+            id="field_templateId"
+            data-cy="templateId"
+            name="templateId"
+            formControlName="templateId"
+            [compareWith]="compareTemplate"
+          >
+            <option [ngValue]="null"></option>
+            @for (templateOption of templateIdsCollection; track $index) {
+              <option [ngValue]="templateOption">{{ templateOption.id }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

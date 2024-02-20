@@ -1,0 +1,28 @@
+{
+  "inotificareApp": {
+    "viberSubscriptions": {
+      "home": {
+        "title": "Viber Subscriptions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Viber Subscriptions",
+        "createOrEditLabel": "Create or edit a Viber Subscriptions",
+        "notFound": "No Viber Subscriptions found"
+      },
+      "created": "A new Viber Subscriptions is created with identifier {{ param }}",
+      "updated": "A Viber Subscriptions is updated with identifier {{ param }}",
+      "deleted": "A Viber Subscriptions is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Viber Subscriptions {{ id }}?"
+      },
+      "detail": {
+        "title": "Viber Subscriptions"
+      },
+      "id": "Id",
+      "userId": "User Id",
+      "userName": "User Name",
+      "status": "Status",
+      "createdTime": "Created Time",
+      "lastUpdatedTime": "Last Updated Time"
+    }
+  }
+}

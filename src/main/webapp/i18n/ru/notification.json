@@ -1,0 +1,28 @@
+{
+  "inotificareApp": {
+    "notification": {
+      "home": {
+        "title": "Notifications",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Notification",
+        "createOrEditLabel": "Создать или отредактировать Notification",
+        "notFound": "Notifications не найдено"
+      },
+      "created": "Новый Notification создан с идентификатором {{ param }}",
+      "updated": "Notification обновлен с идентификатором {{ param }}",
+      "deleted": "Notification удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Notification {{ id }}?"
+      },
+      "detail": {
+        "title": "Notification"
+      },
+      "id": "Id",
+      "content": "Content",
+      "status": "Status",
+      "recipient": "Recipient",
+      "requestId": "Request Id",
+      "channel": "Channel"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "inotificareApp": {
+    "viberSubscriptions": {
+      "home": {
+        "title": "Viber Subscriptions",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Viber Subscriptions",
+        "createOrEditLabel": "Создать или отредактировать Viber Subscriptions",
+        "notFound": "Viber Subscriptions не найдено"
+      },
+      "created": "Новый Viber Subscriptions создан с идентификатором {{ param }}",
+      "updated": "Viber Subscriptions обновлен с идентификатором {{ param }}",
+      "deleted": "Viber Subscriptions удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Viber Subscriptions {{ id }}?"
+      },
+      "detail": {
+        "title": "Viber Subscriptions"
+      },
+      "id": "Id",
+      "userId": "User Id",
+      "userName": "User Name",
+      "status": "Status",
+      "createdTime": "Created Time",
+      "lastUpdatedTime": "Last Updated Time"
+    }
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "inotificareApp": {
+    "requestData": {
+      "home": {
+        "title": "Request Data",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Request Data",
+        "createOrEditLabel": "Создать или отредактировать Request Data",
+        "notFound": "Request Data не найдено"
+      },
+      "created": "Новый Request Data создан с идентификатором {{ param }}",
+      "updated": "Request Data обновлен с идентификатором {{ param }}",
+      "deleted": "Request Data удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Request Data {{ id }}?"
+      },
+      "detail": {
+        "title": "Request Data"
+      },
+      "id": "Id",
+      "channel": "Channel",
+      "recipients": "Recipients",
+      "recipientType": "Recipient Type",
+      "priority": "Priority",
+      "content": "Content",
+      "messageStatus": "Message Status",
+      "createdTime": "Created Time",
+      "templateId": "Template Id",
+      "notification": "Notification"
+    }
+  }
+}

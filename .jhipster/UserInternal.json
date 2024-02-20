@@ -1,0 +1,26 @@
+{
+  "annotations": {
+    "changelogDate": "20231228190734"
+  },
+  "applications": "*",
+  "entityTableName": "user_internal",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "UUID"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "UserInternal",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "notifySettings",
+      "relationshipName": "notifySettings",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

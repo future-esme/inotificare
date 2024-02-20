@@ -1,0 +1,11 @@
+{
+  "inotificareApp": {
+    "MessageStatus": {
+      "null": "",
+      "UNPROCESSED": "UNPROCESSED",
+      "PROCESSED": "PROCESSED",
+      "PENDING": "PENDING",
+      "SENT": "SENT"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--
+        Added the entity Template.
+    -->
+    <changeSet id="20231228190834-1" author="jhipster">
+        <createTable tableName="template">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="body_ro" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="body_ru" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="body_en" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="body_short_ro" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="body_short_ru" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="body_short_en" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="subject_ro" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="subject_ru" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="subject_en" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

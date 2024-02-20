@@ -1,0 +1,114 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-template-heading" data-cy="TemplateCreateUpdateHeading" jhiTranslate="inotificareApp.template.home.createOrEditLabel">
+        Create or edit a Template
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" jhiTranslate="inotificareApp.template.id" for="field_id">Id</label>
+            <input type="text" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.template.title" for="field_title">Title</label>
+          <input type="text" class="form-control" name="title" id="field_title" data-cy="title" formControlName="title" />
+          @if (editForm.get('title')!.invalid && (editForm.get('title')!.dirty || editForm.get('title')!.touched)) {
+            <div>
+              @if (editForm.get('title')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">This field is required.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.template.bodyRo" for="field_bodyRo">Body Ro</label>
+          <input type="text" class="form-control" name="bodyRo" id="field_bodyRo" data-cy="bodyRo" formControlName="bodyRo" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.template.bodyRu" for="field_bodyRu">Body Ru</label>
+          <input type="text" class="form-control" name="bodyRu" id="field_bodyRu" data-cy="bodyRu" formControlName="bodyRu" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.template.bodyEn" for="field_bodyEn">Body En</label>
+          <input type="text" class="form-control" name="bodyEn" id="field_bodyEn" data-cy="bodyEn" formControlName="bodyEn" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.template.bodyShortRo" for="field_bodyShortRo">Body Short Ro</label>
+          <input
+            type="text"
+            class="form-control"
+            name="bodyShortRo"
+            id="field_bodyShortRo"
+            data-cy="bodyShortRo"
+            formControlName="bodyShortRo"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.template.bodyShortRu" for="field_bodyShortRu">Body Short Ru</label>
+          <input
+            type="text"
+            class="form-control"
+            name="bodyShortRu"
+            id="field_bodyShortRu"
+            data-cy="bodyShortRu"
+            formControlName="bodyShortRu"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.template.bodyShortEn" for="field_bodyShortEn">Body Short En</label>
+          <input
+            type="text"
+            class="form-control"
+            name="bodyShortEn"
+            id="field_bodyShortEn"
+            data-cy="bodyShortEn"
+            formControlName="bodyShortEn"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.template.subjectRo" for="field_subjectRo">Subject Ro</label>
+          <input type="text" class="form-control" name="subjectRo" id="field_subjectRo" data-cy="subjectRo" formControlName="subjectRo" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.template.subjectRu" for="field_subjectRu">Subject Ru</label>
+          <input type="text" class="form-control" name="subjectRu" id="field_subjectRu" data-cy="subjectRu" formControlName="subjectRu" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="inotificareApp.template.subjectEn" for="field_subjectEn">Subject En</label>
+          <input type="text" class="form-control" name="subjectEn" id="field_subjectEn" data-cy="subjectEn" formControlName="subjectEn" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Save</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

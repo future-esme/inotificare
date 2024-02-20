@@ -1,0 +1,9 @@
+{
+  "inotificareApp": {
+    "RecipientType": {
+      "null": "",
+      "USER": "USER",
+      "DEPARTMENT": "DEPARTMENT"
+    }
+  }
+}

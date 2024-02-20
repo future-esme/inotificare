@@ -1,0 +1,28 @@
+{
+  "inotificareApp": {
+    "viberSubscriptions": {
+      "home": {
+        "title": "Viber Subscriptions",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Viber Subscriptions",
+        "createOrEditLabel": "Creeare sau editare Viber Subscriptions",
+        "notFound": "No Viber Subscriptions found"
+      },
+      "created": "A fost creată o nouă entitate Viber Subscriptions cu identificatorul {{ param }}",
+      "updated": "Viber Subscriptions cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Viber Subscriptions cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Viber Subscriptions {{ id }}?"
+      },
+      "detail": {
+        "title": "Viber Subscriptions"
+      },
+      "id": "Id",
+      "userId": "User Id",
+      "userName": "User Name",
+      "status": "Status",
+      "createdTime": "Created Time",
+      "lastUpdatedTime": "Last Updated Time"
+    }
+  }
+}

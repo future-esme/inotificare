@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--
+        Added the entity NotifySettings.
+    -->
+    <changeSet id="20231228191234-1" author="jhipster">
+        <createTable tableName="notify_settings">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="channel" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="status" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="credentials_id" type="uuid">
+                <constraints nullable="true" />
+            </column>
+            <column name="user_internal_id" type="uuid">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20231228191234-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="credentials_id"
+                                 baseTableName="notify_settings"
+                                 constraintName="fk_notify_settings__credentials_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="channel_user_credentials"
+        />
+
+        <addForeignKeyConstraint baseColumnNames="user_internal_id"
+                                 baseTableName="notify_settings"
+                                 constraintName="fk_notify_settings__user_internal_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"
+        />
+    </changeSet>
+</databaseChangeLog>

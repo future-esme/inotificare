@@ -1,0 +1,27 @@
+{
+  "inotificareApp": {
+    "userInternal": {
+      "home": {
+        "title": "User Internals",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate User Internal",
+        "createOrEditLabel": "Creeare sau editare User Internal",
+        "notFound": "No User Internals found"
+      },
+      "created": "A fost creată o nouă entitate User Internal cu identificatorul {{ param }}",
+      "updated": "User Internal cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "User Internal cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți User Internal {{ id }}?"
+      },
+      "detail": {
+        "title": "User Internal"
+      },
+      "id": "Id",
+      "notifySettings": "Notify Settings",
+      "notification": "Notification",
+      "department": "Department",
+      "department": "Department"
+    }
+  }
+}

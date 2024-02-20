@@ -1,0 +1,70 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (template) {
+      <div>
+        <h2 data-cy="templateDetailsHeading"><span jhiTranslate="inotificareApp.template.detail.title">Template</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="inotificareApp.template.id">Id</span></dt>
+          <dd>
+            <span>{{ template.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.template.title">Title</span></dt>
+          <dd>
+            <span>{{ template.title }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.template.bodyRo">Body Ro</span></dt>
+          <dd>
+            <span>{{ template.bodyRo }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.template.bodyRu">Body Ru</span></dt>
+          <dd>
+            <span>{{ template.bodyRu }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.template.bodyEn">Body En</span></dt>
+          <dd>
+            <span>{{ template.bodyEn }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.template.bodyShortRo">Body Short Ro</span></dt>
+          <dd>
+            <span>{{ template.bodyShortRo }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.template.bodyShortRu">Body Short Ru</span></dt>
+          <dd>
+            <span>{{ template.bodyShortRu }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.template.bodyShortEn">Body Short En</span></dt>
+          <dd>
+            <span>{{ template.bodyShortEn }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.template.subjectRo">Subject Ro</span></dt>
+          <dd>
+            <span>{{ template.subjectRo }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.template.subjectRu">Subject Ru</span></dt>
+          <dd>
+            <span>{{ template.subjectRu }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.template.subjectEn">Subject En</span></dt>
+          <dd>
+            <span>{{ template.subjectEn }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/template', template.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

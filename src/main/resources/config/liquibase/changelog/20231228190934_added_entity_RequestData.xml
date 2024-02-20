@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--
+        Added the entity RequestData.
+    -->
+    <changeSet id="20231228190934-1" author="jhipster">
+        <createTable tableName="request_data">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="channel" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="recipients" type="text">
+                <constraints nullable="true" />
+            </column>
+            <column name="recipient_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="priority" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="content" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="message_status" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_time" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="template_id" type="uuid">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+        <dropDefaultValue tableName="request_data" columnName="created_time" columnDataType="timestamp"/>
+    </changeSet>
+
+    <changeSet id="20231228190934-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="template_id"
+                                 baseTableName="request_data"
+                                 constraintName="fk_request_data__template_id_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="template"
+        />
+    </changeSet>
+</databaseChangeLog>

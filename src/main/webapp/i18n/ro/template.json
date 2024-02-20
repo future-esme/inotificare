@@ -1,0 +1,34 @@
+{
+  "inotificareApp": {
+    "template": {
+      "home": {
+        "title": "Templates",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Template",
+        "createOrEditLabel": "Creeare sau editare Template",
+        "notFound": "No Templates found"
+      },
+      "created": "A fost creată o nouă entitate Template cu identificatorul {{ param }}",
+      "updated": "Template cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Template cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Template {{ id }}?"
+      },
+      "detail": {
+        "title": "Template"
+      },
+      "id": "Id",
+      "title": "Title",
+      "bodyRo": "Body Ro",
+      "bodyRu": "Body Ru",
+      "bodyEn": "Body En",
+      "bodyShortRo": "Body Short Ro",
+      "bodyShortRu": "Body Short Ru",
+      "bodyShortEn": "Body Short En",
+      "subjectRo": "Subject Ro",
+      "subjectRu": "Subject Ru",
+      "subjectEn": "Subject En",
+      "requestData": "Request Data"
+    }
+  }
+}

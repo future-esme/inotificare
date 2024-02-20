@@ -1,0 +1,9 @@
+{
+  "inotificareApp": {
+    "NotifyChannelStatusEnum": {
+      "null": "",
+      "ON": "ON",
+      "OFF": "OFF"
+    }
+  }
+}

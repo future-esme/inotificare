@@ -1,0 +1,62 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (notification) {
+      <div>
+        <h2 data-cy="notificationDetailsHeading"><span jhiTranslate="inotificareApp.notification.detail.title">Notification</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="inotificareApp.notification.id">Id</span></dt>
+          <dd>
+            <span>{{ notification.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.notification.content">Content</span></dt>
+          <dd>
+            <span>{{ notification.content }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.notification.status">Status</span></dt>
+          <dd>
+            <span jhiTranslate="{{ 'inotificareApp.MessageStatus.' + notification.status }}">{{ notification.status }}</span>
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.notification.recipient">Recipient</span></dt>
+          <dd>
+            @if (notification.recipient) {
+              <div>
+                <a [routerLink]="['/user-internal', notification.recipient.id, 'view']">{{ notification.recipient.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.notification.requestId">Request Id</span></dt>
+          <dd>
+            @if (notification.requestId) {
+              <div>
+                <a [routerLink]="['/request-data', notification.requestId.id, 'view']">{{ notification.requestId.id }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="inotificareApp.notification.channel">Channel</span></dt>
+          <dd>
+            @if (notification.channel) {
+              <div>
+                <a [routerLink]="['/channel-user-credentials', notification.channel.id, 'view']">{{ notification.channel.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+        </button>
+
+        <button type="button" [routerLink]="['/notification', notification.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

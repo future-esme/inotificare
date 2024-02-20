@@ -1,0 +1,34 @@
+{
+  "inotificareApp": {
+    "template": {
+      "home": {
+        "title": "Templates",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Template",
+        "createOrEditLabel": "Create or edit a Template",
+        "notFound": "No Templates found"
+      },
+      "created": "A new Template is created with identifier {{ param }}",
+      "updated": "A Template is updated with identifier {{ param }}",
+      "deleted": "A Template is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Template {{ id }}?"
+      },
+      "detail": {
+        "title": "Template"
+      },
+      "id": "Id",
+      "title": "Title",
+      "bodyRo": "Body Ro",
+      "bodyRu": "Body Ru",
+      "bodyEn": "Body En",
+      "bodyShortRo": "Body Short Ro",
+      "bodyShortRu": "Body Short Ru",
+      "bodyShortEn": "Body Short En",
+      "subjectRo": "Subject Ro",
+      "subjectRu": "Subject Ru",
+      "subjectEn": "Subject En",
+      "requestData": "Request Data"
+    }
+  }
+}

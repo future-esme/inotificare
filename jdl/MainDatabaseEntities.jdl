@@ -1,6 +1,6 @@
-entity User {
+entity UserInternal {
+    id UUID
 }
-
 entity Template {
     id UUID,
     title String required,
@@ -80,6 +80,7 @@ enum MessageStatus {
 }
 
 entity ChannelUserCredentials {
+    id UUID,
     chatId String,
     channel Channel
 }
@@ -96,17 +97,21 @@ enum RecipientType {
 
 relationship OneToOne {
     RequestData{templateId} to Template,
-    Department{departmentAdmin} to User
-    Notification{recipient} to User,
+    Department{departmentAdmin} to UserInternal,
+    Notification{recipient} to UserInternal,
     Notification{requestId} to RequestData,
-    Notification{channel} to ChannelUserCredentials{chatId},
-    NotifySettings{credentials} to ChannelUserCredentials{chatId}
+    Notification{channel} to ChannelUserCredentials,
+    NotifySettings{credentials} to ChannelUserCredentials
 }
 
 relationship OneToMany {
-    User{notifySettings} to NotifySettings
+    UserInternal{notifySettings} to NotifySettings
 }
 
 relationship ManyToMany {
-    User{departments} to Department
+    Department{members} to UserInternal
 }
+
+paginate * with pagination
+service * with serviceClass
+filter *

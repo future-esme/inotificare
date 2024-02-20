@@ -1,0 +1,27 @@
+{
+  "inotificareApp": {
+    "notifySettings": {
+      "home": {
+        "title": "Notify Settings",
+        "refreshListLabel": "Обновить список",
+        "createLabel": "Создать новый Notify Settings",
+        "createOrEditLabel": "Создать или отредактировать Notify Settings",
+        "notFound": "Notify Settings не найдено"
+      },
+      "created": "Новый Notify Settings создан с идентификатором {{ param }}",
+      "updated": "Notify Settings обновлен с идентификатором {{ param }}",
+      "deleted": "Notify Settings удален с идентификатором {{ param }}",
+      "delete": {
+        "question": "Вы уверены что хотите удалить Notify Settings {{ id }}?"
+      },
+      "detail": {
+        "title": "Notify Settings"
+      },
+      "id": "Id",
+      "channel": "Channel",
+      "status": "Status",
+      "credentials": "Credentials",
+      "userInternal": "User Internal"
+    }
+  }
+}

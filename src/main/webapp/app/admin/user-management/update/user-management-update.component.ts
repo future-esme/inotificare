@@ -21,7 +21,6 @@ const newUser: IUser = {
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export default class UserManagementUpdateComponent implements OnInit {
-  languages = LANGUAGES;
   authorities: string[] = [];
   isSaving = false;
 
@@ -38,12 +37,6 @@ export default class UserManagementUpdateComponent implements OnInit {
     }),
     firstName: new FormControl(userTemplate.firstName, { validators: [Validators.maxLength(50)] }),
     lastName: new FormControl(userTemplate.lastName, { validators: [Validators.maxLength(50)] }),
-    email: new FormControl(userTemplate.email, {
-      nonNullable: true,
-      validators: [Validators.minLength(5), Validators.maxLength(254), Validators.email],
-    }),
-    activated: new FormControl(userTemplate.activated, { nonNullable: true }),
-    langKey: new FormControl(userTemplate.langKey, { nonNullable: true }),
     authorities: new FormControl(userTemplate.authorities, { nonNullable: true }),
   });
 

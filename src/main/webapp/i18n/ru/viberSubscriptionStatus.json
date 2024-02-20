@@ -1,0 +1,10 @@
+{
+  "inotificareApp": {
+    "ViberSubscriptionStatus": {
+      "null": "",
+      "WAITING": "WAITING",
+      "SUBSCRIBED": "SUBSCRIBED",
+      "UNSUBSCRIBED": "UNSUBSCRIBED"
+    }
+  }
+}

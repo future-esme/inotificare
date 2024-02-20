@@ -1,0 +1,27 @@
+{
+  "inotificareApp": {
+    "notifySettings": {
+      "home": {
+        "title": "Notify Settings",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Creeare o nouă entitate Notify Settings",
+        "createOrEditLabel": "Creeare sau editare Notify Settings",
+        "notFound": "No Notify Settings found"
+      },
+      "created": "A fost creată o nouă entitate Notify Settings cu identificatorul {{ param }}",
+      "updated": "Notify Settings cu identificatorul {{ param }} a fost actualizată",
+      "deleted": "Notify Settings cu identificatorul {{ param }} a fost ștearsă",
+      "delete": {
+        "question": "Sunteți sigur că doriți să ștergeți Notify Settings {{ id }}?"
+      },
+      "detail": {
+        "title": "Notify Settings"
+      },
+      "id": "Id",
+      "channel": "Channel",
+      "status": "Status",
+      "credentials": "Credentials",
+      "userInternal": "User Internal"
+    }
+  }
+}

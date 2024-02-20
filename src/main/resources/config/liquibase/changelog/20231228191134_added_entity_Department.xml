@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+
+    <!--
+        Added the entity Department.
+    -->
+    <changeSet id="20231228191134-1" author="jhipster">
+        <createTable tableName="department">
+            <column name="id" type="uuid">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="title" type="varchar(255)">
+                <constraints nullable="false" />
+            </column>
+            <column name="department_admin_id" type="uuid">
+                <constraints nullable="true" />
+            </column>
+            <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20231228191134-1-relations" author="jhipster">
+
+        <createTable tableName="rel_department__members">
+            <column name="members_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+            <column name="department_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addPrimaryKey columnNames="department_id, members_id" tableName="rel_department__members"/>
+    </changeSet>
+
+    <changeSet id="20231228191134-2" author="jhipster">
+
+        <addForeignKeyConstraint baseColumnNames="department_admin_id"
+                                 baseTableName="department"
+                                 constraintName="fk_department__department_admin_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"
+        />
+
+        <addForeignKeyConstraint baseColumnNames="department_id"
+                                 baseTableName="rel_department__members"
+                                 constraintName="fk_rel_department__members__department_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="department"
+        />
+
+        <addForeignKeyConstraint baseColumnNames="members_id"
+                                 baseTableName="rel_department__members"
+                                 constraintName="fk_rel_department__members__members_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="jhi_user"
+        />
+    </changeSet>
+</databaseChangeLog>

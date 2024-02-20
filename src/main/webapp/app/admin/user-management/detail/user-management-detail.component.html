@@ -11,11 +11,6 @@
           <dt><span jhiTranslate="userManagement.login">Login</span></dt>
           <dd>
             <span>{{ user.login }}</span>
-            @if (user.activated) {
-              <span class="badge bg-success" jhiTranslate="userManagement.activated">Activated</span>
-            } @else {
-              <span class="badge bg-danger" jhiTranslate="userManagement.deactivated">Deactivated</span>
-            }
           </dd>
 
           <dt><span jhiTranslate="userManagement.firstName">First name</span></dt>
@@ -23,12 +18,6 @@
 
           <dt><span jhiTranslate="userManagement.lastName">Last name</span></dt>
           <dd>{{ user.lastName }}</dd>
-
-          <dt><span jhiTranslate="userManagement.email">Email</span></dt>
-          <dd>{{ user.email }}</dd>
-
-          <dt><span jhiTranslate="userManagement.langKey">Language</span></dt>
-          <dd>{{ user.langKey }}</dd>
 
           <dt><span jhiTranslate="userManagement.createdBy">Created by</span></dt>
           <dd>{{ user.createdBy }}</dd>
