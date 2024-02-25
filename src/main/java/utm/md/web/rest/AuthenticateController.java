@@ -25,6 +25,8 @@ import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.web.bind.annotation.*;
+import utm.md.service.UserService;
+import utm.md.service.dto.ActivateAccountLoginDTO;
 import utm.md.web.rest.vm.LoginVM;
 
 /**
@@ -45,10 +47,16 @@ public class AuthenticateController {
     private long tokenValidityInSecondsForRememberMe;
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
+    private final UserService userService;
 
-    public AuthenticateController(JwtEncoder jwtEncoder, AuthenticationManagerBuilder authenticationManagerBuilder) {
+    public AuthenticateController(
+        JwtEncoder jwtEncoder,
+        AuthenticationManagerBuilder authenticationManagerBuilder,
+        UserService userService
+    ) {
         this.jwtEncoder = jwtEncoder;
         this.authenticationManagerBuilder = authenticationManagerBuilder;
+        this.userService = userService;
     }
 
     @PostMapping("/authenticate")
@@ -76,6 +84,13 @@ public class AuthenticateController {
     public String isAuthenticated(HttpServletRequest request) {
         log.debug("REST request to check if the current user is authenticated");
         return request.getRemoteUser();
+    }
+
+    @PostMapping("/activate-login")
+    public ResponseEntity<Void> activateAccount(ActivateAccountLoginDTO activateAccountLoginDTO) {
+        log.debug("Activate account for user {}", activateAccountLoginDTO.getUsername());
+        userService.activateAccount(activateAccountLoginDTO);
+        return ResponseEntity.ok().build();
     }
 
     public String createToken(Authentication authentication, boolean rememberMe) {

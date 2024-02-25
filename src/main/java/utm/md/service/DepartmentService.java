@@ -9,7 +9,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utm.md.domain.Department;
+import utm.md.domain.User;
+import utm.md.domain.enumeration.DepartmentRoleEnum;
 import utm.md.repository.DepartmentRepository;
+import utm.md.repository.UserRepository;
+import utm.md.security.SecurityUtils;
+import utm.md.web.rest.errors.NotFoundAlertException;
 
 /**
  * Service Implementation for managing {@link utm.md.domain.Department}.
@@ -21,9 +26,11 @@ public class DepartmentService {
     private final Logger log = LoggerFactory.getLogger(DepartmentService.class);
 
     private final DepartmentRepository departmentRepository;
+    private final UserRepository userRepository;
 
-    public DepartmentService(DepartmentRepository departmentRepository) {
+    public DepartmentService(DepartmentRepository departmentRepository, UserRepository userRepository) {
         this.departmentRepository = departmentRepository;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -37,6 +44,36 @@ public class DepartmentService {
         return departmentRepository.save(department);
     }
 
+    public Department addMember(UUID departmentId, UUID userId) {
+        log.debug("Add member to department");
+        var departmentOptional = departmentRepository.findById(departmentId);
+        if (departmentOptional.isPresent()) {
+            var department = departmentOptional.get();
+            var userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent()) {
+                var user = userOptional.get();
+                department.addMembers(user);
+                departmentRepository.save(department);
+            }
+        }
+        throw new NotFoundAlertException("Entity not found", "user/department", "notFound");
+    }
+
+    public Department removeMember(UUID departmentId, UUID userId) {
+        log.debug("Remove member to department");
+        var departmentOptional = departmentRepository.findById(departmentId);
+        if (departmentOptional.isPresent()) {
+            var department = departmentOptional.get();
+            var userOptional = userRepository.findById(userId);
+            if (userOptional.isPresent()) {
+                var user = userOptional.get();
+                department.removeMembers(user);
+                departmentRepository.save(department);
+            }
+        }
+        throw new NotFoundAlertException("Entity not found", "user/department", "notFound");
+    }
+
     /**
      * Update a department.
      *
@@ -46,27 +83,6 @@ public class DepartmentService {
     public Department update(Department department) {
         log.debug("Request to update Department : {}", department);
         return departmentRepository.save(department);
-    }
-
-    /**
-     * Partially update a department.
-     *
-     * @param department the entity to update partially.
-     * @return the persisted entity.
-     */
-    public Optional<Department> partialUpdate(Department department) {
-        log.debug("Request to partially update Department : {}", department);
-
-        return departmentRepository
-            .findById(department.getId())
-            .map(existingDepartment -> {
-                if (department.getTitle() != null) {
-                    existingDepartment.setTitle(department.getTitle());
-                }
-
-                return existingDepartment;
-            })
-            .map(departmentRepository::save);
     }
 
     /**
@@ -110,5 +126,27 @@ public class DepartmentService {
     public void delete(UUID id) {
         log.debug("Request to delete Department : {}", id);
         departmentRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<Department> findMyDepartments(Pageable page) {
+        var userLogin = SecurityUtils.getCurrentUserLogin();
+        if (userLogin.isPresent()) {
+            var userId = userRepository.findOneByLogin(userLogin.get());
+            var resultList = departmentRepository.findDepartmentByUserId(userId.get().getId(), page);
+            return resultList.map(department -> {
+                department.setDepartmentRole(getRoleForCurrentUserInDepartment(userId.get(), department));
+                return department;
+            });
+        }
+        return Page.empty();
+    }
+
+    private DepartmentRoleEnum getRoleForCurrentUserInDepartment(User user, Department department) {
+        if (department.getDepartmentAdmin().equals(user)) {
+            return DepartmentRoleEnum.ADMIN;
+        } else {
+            return DepartmentRoleEnum.MEMBER;
+        }
     }
 }

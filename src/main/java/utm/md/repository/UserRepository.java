@@ -19,5 +19,8 @@ public interface UserRepository extends JpaRepository<User, UUID> {
     @EntityGraph(attributePaths = "authorities")
     Optional<User> findOneWithAuthoritiesByLogin(String login);
 
+    @EntityGraph(attributePaths = "notifySettings")
+    Optional<User> findOneWithNotifySettingsByLogin(String login);
+
     Page<User> findAllByIdNotNull(Pageable pageable);
 }

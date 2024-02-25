@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import utm.md.domain.enumeration.DepartmentRoleEnum;
 
 /**
  * A Department.
@@ -37,6 +38,9 @@ public class Department implements Serializable {
         inverseJoinColumns = @JoinColumn(name = "members_id")
     )
     private Set<User> members = new HashSet<>();
+
+    @Transient
+    private DepartmentRoleEnum departmentRole;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -100,6 +104,15 @@ public class Department implements Serializable {
     public Department removeMembers(User userInternal) {
         this.members.remove(userInternal);
         return this;
+    }
+
+    @Transient
+    public DepartmentRoleEnum getDepartmentRole() {
+        return departmentRole;
+    }
+
+    public void setDepartmentRole(DepartmentRoleEnum departmentRole) {
+        this.departmentRole = departmentRole;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

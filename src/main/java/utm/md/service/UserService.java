@@ -1,6 +1,7 @@
 package utm.md.service;
 
-import java.util.HashSet;
+import static utm.md.util.ActivationTokenGeneratorUtil.getOtpKey;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -17,10 +18,11 @@ import utm.md.domain.Authority;
 import utm.md.domain.User;
 import utm.md.repository.AuthorityRepository;
 import utm.md.repository.UserRepository;
-import utm.md.security.AuthoritiesConstants;
 import utm.md.security.SecurityUtils;
+import utm.md.service.dto.ActivateAccountLoginDTO;
 import utm.md.service.dto.AdminUserDTO;
 import utm.md.service.dto.UserDTO;
+import utm.md.web.rest.errors.BadRequestAlertException;
 
 /**
  * Service class for managing users.
@@ -36,27 +38,18 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
+    private final SendAuthenticationKeyMailService sendAuthenticationKeyMailService;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder, AuthorityRepository authorityRepository) {
+    public UserService(
+        UserRepository userRepository,
+        PasswordEncoder passwordEncoder,
+        AuthorityRepository authorityRepository,
+        SendAuthenticationKeyMailService sendAuthenticationKeyMailService
+    ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
-    }
-
-    public User registerUser(AdminUserDTO userDTO, String password) {
-        User newUser = new User();
-        String encryptedPassword = passwordEncoder.encode(password);
-        newUser.setLogin(userDTO.getLogin().toLowerCase());
-        // new user gets initially a generated password
-        newUser.setPassword(encryptedPassword);
-        newUser.setFirstName(userDTO.getFirstName());
-        newUser.setLastName(userDTO.getLastName());
-        Set<Authority> authorities = new HashSet<>();
-        authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
-        newUser.setAuthorities(authorities);
-        userRepository.save(newUser);
-        log.debug("Created Information for User: {}", newUser);
-        return newUser;
+        this.sendAuthenticationKeyMailService = sendAuthenticationKeyMailService;
     }
 
     public User createUser(AdminUserDTO userDTO) {
@@ -64,6 +57,8 @@ public class UserService {
         user.setLogin(userDTO.getLogin().toLowerCase());
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
+        user.setActivated(false);
+        user.setActivationKey(getOtpKey());
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         if (userDTO.getAuthorities() != null) {
@@ -77,8 +72,29 @@ public class UserService {
             user.setAuthorities(authorities);
         }
         userRepository.save(user);
+        sendAuthenticationKeyMailService.sendEmail(userDTO.getEmail(), user.getActivationKey());
         log.debug("Created Information for User: {}", user);
         return user;
+    }
+
+    public void activateAccount(ActivateAccountLoginDTO accountLoginDTO) {
+        log.debug("Activate account on first login");
+        var userOptional = userRepository.findOneByLogin(accountLoginDTO.getUsername());
+        if (userOptional.isPresent()) {
+            var user = userOptional.get();
+            if (user.getActivated()) {
+                throw new BadRequestAlertException("User already activated", "user", "activatedAlready");
+            } else {
+                if (accountLoginDTO.getActivationKey().equals(user.getActivationKey())) {
+                    user.setActivated(true);
+                    user.setActivationKey(null);
+                    user.setPassword(passwordEncoder.encode(accountLoginDTO.getPassword()));
+                    userRepository.save(user);
+                } else {
+                    throw new BadRequestAlertException("Invalid activation key", "user", "invalidActivationKey");
+                }
+            }
+        }
     }
 
     /**
@@ -173,6 +189,11 @@ public class UserService {
     @Transactional(readOnly = true)
     public Optional<User> getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin);
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<User> getUserProfileWithAuthorities() {
+        return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithNotifySettingsByLogin);
     }
 
     /**

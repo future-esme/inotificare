@@ -16,26 +16,41 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import tech.jhipster.web.util.PaginationUtil;
+import utm.md.domain.Notification;
+import utm.md.domain.User;
 import utm.md.service.UserService;
 import utm.md.service.dto.UserDTO;
+import utm.md.service.mail.MailService;
 import utm.md.service.telegram.SendTelegramNotificationService;
 
 @RestController
 @RequestMapping("/api")
 public class PublicUserResource {
 
-    private static final List<String> ALLOWED_ORDERED_PROPERTIES = Collections.unmodifiableList(
-        Arrays.asList("id", "login", "firstName", "lastName", "email", "activated", "langKey")
+    private static final List<String> ALLOWED_ORDERED_PROPERTIES = List.of(
+        "id",
+        "login",
+        "firstName",
+        "lastName",
+        "email",
+        "activated",
+        "langKey"
     );
 
     private final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
 
     private final UserService userService;
     private final SendTelegramNotificationService telegramNotificationService;
+    private final MailService mailService;
 
-    public PublicUserResource(UserService userService, SendTelegramNotificationService telegramNotificationService) {
+    public PublicUserResource(
+        UserService userService,
+        SendTelegramNotificationService telegramNotificationService,
+        MailService mailService
+    ) {
         this.userService = userService;
         this.telegramNotificationService = telegramNotificationService;
+        this.mailService = mailService;
     }
 
     /**
@@ -72,6 +87,16 @@ public class PublicUserResource {
     @GetMapping("/send")
     public ResponseEntity<Void> sendNotification() {
         telegramNotificationService.sendTestNotification();
+        return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/send-email")
+    public ResponseEntity<Void> sendNotificationEmail() {
+        var notification = new Notification();
+        var user = new User();
+        user.setLogin("carte");
+        notification.setRecipient(user);
+        mailService.sendEmail(notification);
         return ResponseEntity.ok().build();
     }
 }

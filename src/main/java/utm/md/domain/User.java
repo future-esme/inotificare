@@ -49,6 +49,12 @@ public class User extends AbstractAuditingEntity<UUID> implements Serializable {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
+    @Column(name = "activated")
+    private Boolean activated;
+
+    @Column(name = "activation_key")
+    private String activationKey;
+
     @JsonIgnore
     @ManyToMany
     @JoinTable(
@@ -141,6 +147,23 @@ public class User extends AbstractAuditingEntity<UUID> implements Serializable {
         this.notifySettings.remove(notifySettings);
         notifySettings.setUserInternal(null);
         return this;
+    }
+
+    public Boolean getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
+    }
+
+    @JsonIgnore
+    public String getActivationKey() {
+        return activationKey;
+    }
+
+    public void setActivationKey(String activationKey) {
+        this.activationKey = activationKey;
     }
 
     @Override
