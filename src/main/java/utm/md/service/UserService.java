@@ -38,13 +38,13 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     private final AuthorityRepository authorityRepository;
-    private final SendAuthenticationKeyMailService sendAuthenticationKeyMailService;
+    private final SendKeyMailService sendAuthenticationKeyMailService;
 
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        SendAuthenticationKeyMailService sendAuthenticationKeyMailService
+        SendKeyMailService sendAuthenticationKeyMailService
     ) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -58,7 +58,7 @@ public class UserService {
         user.setFirstName(userDTO.getFirstName());
         user.setLastName(userDTO.getLastName());
         user.setActivated(false);
-        user.setActivationKey(getOtpKey());
+        user.setActivationKey(getOtpKey(8));
         String encryptedPassword = passwordEncoder.encode(RandomUtil.generatePassword());
         user.setPassword(encryptedPassword);
         if (userDTO.getAuthorities() != null) {
@@ -72,7 +72,7 @@ public class UserService {
             user.setAuthorities(authorities);
         }
         userRepository.save(user);
-        sendAuthenticationKeyMailService.sendEmail(userDTO.getEmail(), user.getActivationKey());
+        sendAuthenticationKeyMailService.sendEmailActivationKey(userDTO.getEmail(), user.getActivationKey());
         log.debug("Created Information for User: {}", user);
         return user;
     }

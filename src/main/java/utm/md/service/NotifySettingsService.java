@@ -1,5 +1,10 @@
 package utm.md.service;
 
+import static utm.md.domain.enumeration.Channel.EMAIL;
+import static utm.md.util.ActivationTokenGeneratorUtil.getOtpKey;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -9,10 +14,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import utm.md.domain.ChannelUserCredentials;
+import utm.md.domain.ChannelsToken;
 import utm.md.domain.NotifySettings;
 import utm.md.domain.User;
+import utm.md.domain.enumeration.Channel;
 import utm.md.domain.enumeration.NotifyChannelStatusEnum;
 import utm.md.repository.ChannelUserCredentialsRepository;
+import utm.md.repository.ChannelsTokenRepository;
 import utm.md.repository.NotifySettingsRepository;
 import utm.md.repository.UserRepository;
 import utm.md.security.SecurityUtils;
@@ -29,16 +37,22 @@ public class NotifySettingsService {
 
     private final NotifySettingsRepository notifySettingsRepository;
     private final ChannelUserCredentialsRepository credentialsRepository;
+    private final ChannelsTokenRepository channelsTokenRepository;
     private final UserRepository userRepository;
+    private final SendKeyMailService mailService;
 
     public NotifySettingsService(
         NotifySettingsRepository notifySettingsRepository,
         ChannelUserCredentialsRepository credentialsRepository,
-        UserRepository userRepository
+        ChannelsTokenRepository channelsTokenRepository,
+        UserRepository userRepository,
+        SendKeyMailService mailService
     ) {
         this.notifySettingsRepository = notifySettingsRepository;
         this.credentialsRepository = credentialsRepository;
+        this.channelsTokenRepository = channelsTokenRepository;
         this.userRepository = userRepository;
+        this.mailService = mailService;
     }
 
     /**
@@ -99,17 +113,18 @@ public class NotifySettingsService {
         return userRepository.findOneByLogin(userLogin).get();
     }
 
-    public User addNotifySettings(ChannelUserCredentials credentials) {
+    public User addNotifySettings(String channel, String email) {
         log.debug("Request to add new channel of notification for current user");
         var userLogin = SecurityUtils.getCurrentUserLogin().get();
         var user = userRepository.findOneByLogin(userLogin).get();
-        credentials = credentialsRepository.save(credentials);
+        var credentials = createCredentials(channel, email);
         var newNotifySettings = new NotifySettings();
-        newNotifySettings.setStatus(NotifyChannelStatusEnum.ON);
+        newNotifySettings.setStatus(NotifyChannelStatusEnum.OFF);
         newNotifySettings.setChannel(credentials.getChannel());
         newNotifySettings.setUserInternal(user);
         newNotifySettings.setCredentials(credentials);
         notifySettingsRepository.save(newNotifySettings);
+        generateAndSaveToken(newNotifySettings);
         return userRepository.findOneByLogin(userLogin).get();
     }
 
@@ -129,5 +144,29 @@ public class NotifySettingsService {
             }
         }
         throw new BadRequestAlertException("Invalid change status request", "notifySettings", "badRequest");
+    }
+
+    private ChannelUserCredentials createCredentials(String channel, String email) {
+        log.debug("Create credentials for notify settings current user, channel : {}", channel);
+        var credentials = new ChannelUserCredentials();
+        if (EMAIL.name().equals(channel)) {
+            credentials.setChatId(email);
+        }
+        credentials.setChannel(Channel.valueOf(channel));
+        return credentialsRepository.save(credentials);
+    }
+
+    private void generateAndSaveToken(NotifySettings notifySettings) {
+        log.debug("Generate token for activation channel : {}", notifySettings.getChannel().name());
+        var channelsToken = new ChannelsToken();
+        channelsToken.setToken(String.valueOf(getOtpKey(10)));
+        channelsToken.setChannel(notifySettings.getChannel());
+        channelsToken.setUserId(notifySettings.getUserInternal().getId());
+        channelsToken.createdTime(Instant.now());
+        channelsToken.setExpirationTime(Instant.now().plus(5, ChronoUnit.MINUTES));
+        channelsTokenRepository.save(channelsToken);
+        if (EMAIL.equals(notifySettings.getChannel())) {
+            mailService.sendEmailValidateChannel(notifySettings.getCredentials().getChatId(), channelsToken.getToken());
+        }
     }
 }

@@ -57,48 +57,17 @@ public class NotifySettingsResource {
         this.notifySettingsQueryService = notifySettingsQueryService;
     }
 
-    @PostMapping("")
-    public ResponseEntity<User> createNotifySettings(@RequestBody ChannelUserCredentials credentials) {
-        log.debug("REST request to save NotifySettings : {}", credentials);
+    @GetMapping("/add-channel/{channel}")
+    public ResponseEntity<User> createNotifySettings(
+        @PathVariable("channel") String channel,
+        @RequestParam(value = "email", required = false) String email
+    ) {
+        log.debug("REST request to save NotifySettings : {}", channel);
 
-        var result = notifySettingsService.addNotifySettings(credentials);
+        var result = notifySettingsService.addNotifySettings(channel, email);
         return ResponseEntity
             .status(201)
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
-    }
-
-    /**
-     * {@code PUT  /notify-settings/:id} : Updates an existing notifySettings.
-     *
-     * @param id the id of the notifySettings to save.
-     * @param notifySettings the notifySettings to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated notifySettings,
-     * or with status {@code 400 (Bad Request)} if the notifySettings is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the notifySettings couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PutMapping("/{id}")
-    public ResponseEntity<NotifySettings> updateNotifySettings(
-        @PathVariable(value = "id", required = false) final UUID id,
-        @RequestBody NotifySettings notifySettings
-    ) {
-        log.debug("REST request to update NotifySettings : {}, {}", id, notifySettings);
-        if (notifySettings.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, notifySettings.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!notifySettingsRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        NotifySettings result = notifySettingsService.update(notifySettings);
-        return ResponseEntity
-            .ok()
-            .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, notifySettings.getId().toString()))
             .body(result);
     }
 

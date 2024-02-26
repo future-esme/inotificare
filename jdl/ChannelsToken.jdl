@@ -1,0 +1,9 @@
+entity ChannelsToken {
+    id UUID,
+    token String maxlength(10),
+    userId UUID,
+    createdTime Instant,
+    expirationTime Instant
+}
+
+skipClient *

@@ -29,19 +29,4 @@ public class SendViberNotificationService {
         HttpEntity<ViberNotificationDTO> request = new HttpEntity<>(notificationBody, RequestUtil.getHttpHeaders(token));
         var response = restTemplate.exchange(address, HttpMethod.POST, request, String.class);
     }
-
-    public void handleCallback(ViberCallbackDTO callback) {
-        if (nonNull(callback)) {
-            if (callback.event().equals(ViberEventTypeEnum.subscribed)) {
-                //store user id and name
-            } else if (callback.event().equals(ViberEventTypeEnum.unsubscribed)) {
-                //delete account
-            } else if (callback.event().equals(ViberEventTypeEnum.message)) {
-                //check there waiting subscriptions
-                //check message.text is a code
-                //check to activate and change status in vibersubscriptions
-                //else ignore
-            }
-        }
-    }
 }
