@@ -1,7 +1,5 @@
 package utm.md.web.rest;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +19,6 @@ import utm.md.domain.User;
 import utm.md.service.UserService;
 import utm.md.service.dto.UserDTO;
 import utm.md.service.mail.MailService;
-import utm.md.service.telegram.SendTelegramNotificationService;
 
 @RestController
 @RequestMapping("/api")
@@ -40,16 +37,10 @@ public class PublicUserResource {
     private final Logger log = LoggerFactory.getLogger(PublicUserResource.class);
 
     private final UserService userService;
-    private final SendTelegramNotificationService telegramNotificationService;
     private final MailService mailService;
 
-    public PublicUserResource(
-        UserService userService,
-        SendTelegramNotificationService telegramNotificationService,
-        MailService mailService
-    ) {
+    public PublicUserResource(UserService userService, MailService mailService) {
         this.userService = userService;
-        this.telegramNotificationService = telegramNotificationService;
         this.mailService = mailService;
     }
 
@@ -82,12 +73,6 @@ public class PublicUserResource {
     @GetMapping("/authorities")
     public List<String> getAuthorities() {
         return userService.getAuthorities();
-    }
-
-    @GetMapping("/send")
-    public ResponseEntity<Void> sendNotification() {
-        telegramNotificationService.sendTestNotification();
-        return ResponseEntity.ok().build();
     }
 
     @GetMapping("/send-email")

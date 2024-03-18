@@ -8,15 +8,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import tech.jhipster.config.JHipsterProperties;
 
-/**
- * Service for sending emails.
- * <p>
- * We use the {@link Async} annotation to send emails asynchronously.
- */
 @Service
 public class SendKeyMailService {
 

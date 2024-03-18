@@ -208,8 +208,3 @@ jhipster:
 # More documentation is available at:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
-
-application:
-  tokens:
-    telegram: bot6836857631:AAFjIt4PTsGmhtu0DYNoDe352wIDGi66Qmg
-    viber: 522fcae37ce7e2c0-b88dd7e1584713a-b652d65e21b095cf
