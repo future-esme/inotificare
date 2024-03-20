@@ -87,7 +87,7 @@ public class AuthenticateController {
     }
 
     @PostMapping("/activate-login")
-    public ResponseEntity<Void> activateAccount(ActivateAccountLoginDTO activateAccountLoginDTO) {
+    public ResponseEntity<Void> activateAccount(@RequestBody ActivateAccountLoginDTO activateAccountLoginDTO) {
         log.debug("Activate account for user {}", activateAccountLoginDTO.getUsername());
         userService.activateAccount(activateAccountLoginDTO);
         return ResponseEntity.ok().build();

@@ -25,7 +25,7 @@ public class ActivationTokenGeneratorUtil {
             Key key = keyGenerator.generateKey();
             return totp.generateOneTimePasswordString(key, Instant.now());
         } catch (NoSuchAlgorithmException | InvalidKeyException e) {
-            return RandomStringUtils.randomAlphabetic(8);
+            return RandomStringUtils.randomAlphabetic(6);
         }
     }
 }

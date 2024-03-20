@@ -2,7 +2,6 @@ import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
 
 import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/config/error.constants';
 import SharedModule from 'app/shared/shared.module';
@@ -26,7 +25,7 @@ export default class RegisterComponent implements AfterViewInit {
   success = false;
 
   registerForm = new FormGroup({
-    login: new FormControl('', {
+    username: new FormControl('', {
       nonNullable: true,
       validators: [
         Validators.required,
@@ -35,9 +34,9 @@ export default class RegisterComponent implements AfterViewInit {
         Validators.pattern('^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$'),
       ],
     }),
-    email: new FormControl('', {
+    activationKey: new FormControl('', {
       nonNullable: true,
-      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
+      validators: [Validators.required, Validators.minLength(6), Validators.maxLength(6)],
     }),
     password: new FormControl('', {
       nonNullable: true,
@@ -49,10 +48,7 @@ export default class RegisterComponent implements AfterViewInit {
     }),
   });
 
-  constructor(
-    private translateService: TranslateService,
-    private registerService: RegisterService,
-  ) {}
+  constructor(private registerService: RegisterService) {}
 
   ngAfterViewInit(): void {
     if (this.login) {
@@ -70,9 +66,9 @@ export default class RegisterComponent implements AfterViewInit {
     if (password !== confirmPassword) {
       this.doNotMatch = true;
     } else {
-      const { login, email } = this.registerForm.getRawValue();
+      const { username, activationKey } = this.registerForm.getRawValue();
       this.registerService
-        .save({ login, email, password, langKey: this.translateService.currentLang })
+        .save({ username, activationKey, password })
         .subscribe({ next: () => (this.success = true), error: response => this.processError(response) });
     }
   }

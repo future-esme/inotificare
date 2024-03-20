@@ -82,7 +82,7 @@ public class UserService {
         var userOptional = userRepository.findOneByLogin(accountLoginDTO.getUsername());
         if (userOptional.isPresent()) {
             var user = userOptional.get();
-            if (user.getActivated()) {
+            if (Boolean.TRUE.equals(user.getActivated())) {
                 throw new BadRequestAlertException("User already activated", "user", "activatedAlready");
             } else {
                 if (accountLoginDTO.getActivationKey().equals(user.getActivationKey())) {

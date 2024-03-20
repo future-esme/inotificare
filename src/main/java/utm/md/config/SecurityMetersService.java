@@ -1,4 +1,4 @@
-package utm.md.management;
+package utm.md.config;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;

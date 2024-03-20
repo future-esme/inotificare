@@ -41,8 +41,8 @@
       "newpassword.placeholder": "New password",
       "confirmpassword.label": "New password confirmation",
       "confirmpassword.placeholder": "Confirm the new password",
-      "email.label": "Email",
-      "email.placeholder": "Your email"
+      "email.label": "Activation key",
+      "email.placeholder": "Your activation key"
     },
     "messages": {
       "info": {

@@ -10,8 +10,7 @@ import { UserManagementService } from '../service/user-management.service';
 const userTemplate = {} as IUser;
 
 const newUser: IUser = {
-  langKey: 'en',
-  activated: true,
+  authorities: ['ROLE_USER'],
 } as IUser;
 
 @Component({
@@ -23,6 +22,7 @@ const newUser: IUser = {
 export default class UserManagementUpdateComponent implements OnInit {
   authorities: string[] = [];
   isSaving = false;
+  isCreate = false;
 
   editForm = new FormGroup({
     id: new FormControl(userTemplate.id),
@@ -38,6 +38,10 @@ export default class UserManagementUpdateComponent implements OnInit {
     firstName: new FormControl(userTemplate.firstName, { validators: [Validators.maxLength(50)] }),
     lastName: new FormControl(userTemplate.lastName, { validators: [Validators.maxLength(50)] }),
     authorities: new FormControl(userTemplate.authorities, { nonNullable: true }),
+    email: new FormControl(userTemplate.email, {
+      nonNullable: true,
+      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(100), Validators.email],
+    }),
   });
 
   constructor(
@@ -51,6 +55,7 @@ export default class UserManagementUpdateComponent implements OnInit {
         this.editForm.reset(user);
       } else {
         this.editForm.reset(newUser);
+        this.isCreate = true;
       }
     });
     this.userService.authorities().subscribe(authorities => (this.authorities = authorities));

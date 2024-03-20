@@ -50,8 +50,8 @@
       "newpassword.placeholder": "Parolă nouă",
       "confirmpassword.label": "Confirma parolă",
       "confirmpassword.placeholder": "Confirmați noua parolă",
-      "email.label": "Email",
-      "email.placeholder": "Emailul dumneavoastră"
+      "email.label": "Cheia de activare",
+      "email.placeholder": "Cheia dumneavoastră de activare"
     },
     "messages": {
       "info": {
@@ -85,6 +85,12 @@
           "invalid": "Email invalid.",
           "minlength": "Emailul dumneavoastră trebuie să aibă cel puțin 5 caractere",
           "maxlength": "Emailul dumneavoastră nu poate avea mai mult de 50 de caractere."
+        },
+        "activationKey": {
+          "required": "Cheia dumneavoastra de activare este necesara.",
+          "invalid": "Cheie de activare invalida.",
+          "minlength": "Cheie de activare a dumneavoastră trebuie să aibă cel puțin 6 caractere",
+          "maxlength": "Cheie de activare dumneavoastră nu poate avea mai mult de 6 de caractere."
         }
       }
     },

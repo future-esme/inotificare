@@ -19,6 +19,8 @@ logging:
     tech.jhipster: DEBUG
     org.hibernate.SQL: DEBUG
     utm.md: DEBUG
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss.SSS
 
 spring:
   devtools:
@@ -42,17 +44,10 @@ spring:
     # Remove 'faker' if you do not want the sample data to be loaded automatically
     contexts: dev, faker
   mail:
-    host: smtp.gmail.com
-    port: 587
-    username: depozitar.situatii.financiare@gmail.com
-    password: pqwjabwherzomudh
-    properties.mail.smtp:
-      auth: true
-      connectiontimeout: 5000
-      timeout: 5000
-      writetimeout: 5000
-      starttls.enable: true
-      ssl.trust: smtp.gmail.com
+    host: localhost
+    port: 25
+    username:
+    password:
   messages:
     cache-duration: PT1S # 1 second, see the ISO 8601 standard
   thymeleaf:

@@ -95,5 +95,18 @@
             <column name="authority_name" type="string"/>
         </loadData>
     </changeSet>
+    <changeSet id="00000000000001-2" author="esempla">
+        <addColumn tableName="jhi_user">
+            <column name="activated" type="boolean" valueBoolean="false"/>
+        </addColumn>
+        <addColumn tableName="jhi_user">
+            <column name="activation_key" type="varchar(255)"/>
+        </addColumn>
+        <sql>
+            update jhi_user
+            set activated = true
+            where id is not null;
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>

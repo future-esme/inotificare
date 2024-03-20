@@ -19,6 +19,7 @@
     <include file="config/liquibase/changelog/20231228191234_added_entity_NotifySettings.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231228191334_added_entity_ViberSubscriptions.xml" relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20240226222859_added_entity_ChannelsToken.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240329184459_added_uuid_user_changes.xml" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
