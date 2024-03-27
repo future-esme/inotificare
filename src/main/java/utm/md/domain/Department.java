@@ -27,7 +27,7 @@ public class Department implements Serializable {
     @Column(name = "title", nullable = false)
     private String title;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn
     private User departmentAdmin;
 

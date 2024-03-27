@@ -15,7 +15,14 @@
     "detail": {
       "title": "Utilizator"
     },
-    "login": "Cont",
+    "addChannel": {
+      "noSettings": "Nu aveți configurate canale de comunicare. Selectați opțiunea de mai jos pentru a adăuga un canal nou.",
+      "addChannel": "Adaugă canal",
+      "channel": "Canal"
+    },
+    "login": "Login",
+    "profile": "Profilul dumneavoastră",
+    "notifySettings": "Canale de notificare",
     "firstName": "Prenume",
     "lastName": "Nume",
     "email": "Email",

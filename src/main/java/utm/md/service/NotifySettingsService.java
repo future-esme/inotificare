@@ -3,7 +3,9 @@ package utm.md.service;
 import static utm.md.domain.enumeration.Channel.EMAIL;
 import static utm.md.util.ActivationTokenGeneratorUtil.getOtpKey;
 
+import java.time.Clock;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
@@ -125,7 +127,7 @@ public class NotifySettingsService {
         newNotifySettings.setCredentials(credentials);
         notifySettingsRepository.save(newNotifySettings);
         generateAndSaveToken(newNotifySettings);
-        return userRepository.findOneByLogin(userLogin).get();
+        return userRepository.findOneWithNotifySettingsByLogin(userLogin).get();
     }
 
     public User changeStatusNotifySettings(UUID id) {
@@ -163,7 +165,8 @@ public class NotifySettingsService {
         channelsToken.setChannel(notifySettings.getChannel());
         channelsToken.setUserId(notifySettings.getUserInternal().getId());
         channelsToken.createdTime(Instant.now());
-        channelsToken.setExpirationTime(Instant.now().plus(5, ChronoUnit.MINUTES));
+        channelsToken.setExpirationTime(Instant.now().atZone(ZoneId.of("Europe/Chisinau")).plusMinutes(5).toInstant());
+        channelsToken.setNotifySettings(notifySettings);
         channelsTokenRepository.save(channelsToken);
         if (EMAIL.equals(notifySettings.getChannel())) {
             mailService.sendEmailValidateChannel(notifySettings.getCredentials().getChatId(), channelsToken.getToken());

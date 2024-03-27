@@ -34,7 +34,7 @@ public class Notification implements Serializable {
     private User recipient;
 
     @JsonIgnoreProperties(value = { "templateId", "notification" }, allowSetters = true)
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "request_id")
     private RequestData requestId;
 

@@ -43,17 +43,10 @@ public class NotifySettingsResource {
 
     private final NotifySettingsService notifySettingsService;
 
-    private final NotifySettingsRepository notifySettingsRepository;
-
     private final NotifySettingsQueryService notifySettingsQueryService;
 
-    public NotifySettingsResource(
-        NotifySettingsService notifySettingsService,
-        NotifySettingsRepository notifySettingsRepository,
-        NotifySettingsQueryService notifySettingsQueryService
-    ) {
+    public NotifySettingsResource(NotifySettingsService notifySettingsService, NotifySettingsQueryService notifySettingsQueryService) {
         this.notifySettingsService = notifySettingsService;
-        this.notifySettingsRepository = notifySettingsRepository;
         this.notifySettingsQueryService = notifySettingsQueryService;
     }
 
@@ -65,10 +58,7 @@ public class NotifySettingsResource {
         log.debug("REST request to save NotifySettings : {}", channel);
 
         var result = notifySettingsService.addNotifySettings(channel, email);
-        return ResponseEntity
-            .status(201)
-            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
-            .body(result);
+        return ResponseEntity.status(201).body(result);
     }
 
     /**

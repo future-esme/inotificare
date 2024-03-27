@@ -48,9 +48,11 @@ public class User extends AbstractAuditingEntity<UUID> implements Serializable {
     @Column(name = "last_name", length = 50)
     private String lastName;
 
+    @JsonIgnore
     @Column(name = "activated")
     private Boolean activated;
 
+    @JsonIgnore
     @Column(name = "activation_key")
     private String activationKey;
 

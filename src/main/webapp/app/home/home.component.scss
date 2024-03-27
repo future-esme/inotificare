@@ -21,3 +21,10 @@ Main page styles
     background-size: contain;
   }
 }
+
+.greeting-container {
+  height: 70vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

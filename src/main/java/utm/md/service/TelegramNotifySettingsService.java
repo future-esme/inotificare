@@ -2,6 +2,7 @@ package utm.md.service;
 
 import static utm.md.domain.enumeration.Channel.TELEGRAM;
 
+import java.time.Instant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Async;
@@ -51,6 +52,8 @@ public class TelegramNotifySettingsService {
                 credentials.setChatId(objectCallback.message().chat().id().toString());
                 credentialsRepository.save(credentials);
                 notifySettingsRepository.save(notifySettingsOptional.get());
+                existentTokenOptional.get().setExpirationTime(Instant.MIN);
+                channelsTokenRepository.save(existentTokenOptional.get());
             }
         }
     }

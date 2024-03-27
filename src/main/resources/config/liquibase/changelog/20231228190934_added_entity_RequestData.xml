@@ -50,4 +50,8 @@
                                  referencedTableName="template"
         />
     </changeSet>
+
+    <changeSet id="20231228190934-3" author="jhipster">
+        <dropNotNullConstraint tableName="request_data" columnName="channel"/>
+    </changeSet>
 </databaseChangeLog>

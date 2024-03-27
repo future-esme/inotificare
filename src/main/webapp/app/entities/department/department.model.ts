@@ -1,10 +1,10 @@
-import { IUserInternal } from 'app/entities/user-internal/user-internal.model';
+import { IUser } from '../user/user.model';
 
 export interface IDepartment {
   id: string;
   title?: string | null;
-  departmentAdmin?: IUserInternal | null;
-  members?: IUserInternal[] | null;
+  departmentAdmin?: IUser | null;
+  members?: IUser[] | null;
 }
 
 export type NewDepartment = Omit<IDepartment, 'id'> & { id: null };

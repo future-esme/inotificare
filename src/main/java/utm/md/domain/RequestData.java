@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
 import utm.md.domain.enumeration.Channel;
 import utm.md.domain.enumeration.MessageStatus;
@@ -28,7 +29,7 @@ public class RequestData implements Serializable {
 
     @NotNull
     @Enumerated(EnumType.STRING)
-    @Column(name = "channel", nullable = false)
+    @Column(name = "channel")
     private Channel channel;
 
     @Column(name = "recipients")
@@ -60,8 +61,8 @@ public class RequestData implements Serializable {
     private Template templateId;
 
     @JsonIgnoreProperties(value = { "recipient", "requestId", "channel" }, allowSetters = true)
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "requestId")
-    private Notification notification;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestId")
+    private Set<Notification> notifications;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -182,23 +183,12 @@ public class RequestData implements Serializable {
         return this;
     }
 
-    public Notification getNotification() {
-        return this.notification;
+    public Set<Notification> getNotifications() {
+        return notifications;
     }
 
-    public void setNotification(Notification notification) {
-        if (this.notification != null) {
-            this.notification.setRequestId(null);
-        }
-        if (notification != null) {
-            notification.setRequestId(this);
-        }
-        this.notification = notification;
-    }
-
-    public RequestData notification(Notification notification) {
-        this.setNotification(notification);
-        return this;
+    public void setNotifications(Set<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

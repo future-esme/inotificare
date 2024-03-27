@@ -110,7 +110,7 @@ public class RequestDataService {
         log.debug("Request to get all requestData where Notification is null");
         return StreamSupport
             .stream(requestDataRepository.findAll().spliterator(), false)
-            .filter(requestData -> requestData.getNotification() == null)
+            .filter(requestData -> requestData.getNotifications() == null)
             .toList();
     }
 

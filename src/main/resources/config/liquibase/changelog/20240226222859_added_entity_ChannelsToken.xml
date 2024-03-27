@@ -40,4 +40,11 @@
                                  referencedTableName="jhi_user"
         />
     </changeSet>
+    <changeSet id="20231228190734-3" author="esempla">
+        <addColumn tableName="channels_token">
+            <column name="notify_settings_id" type="uuid">
+                <constraints nullable="false"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

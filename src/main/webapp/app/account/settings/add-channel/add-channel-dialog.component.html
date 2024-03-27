@@ -1,0 +1,45 @@
+<form name="addChannel" (ngSubmit)="confirmCreate()" [formGroup]="editForm">
+  <div class="modal-header">
+    <h4 class="modal-title" jhiTranslate="userManagement.addChannel.addChannel">Adaugă canal</h4>
+
+    <button type="button" class="btn-close" data-dismiss="modal" aria-hidden="true" (click)="cancel()"></button>
+  </div>
+
+  <div class="modal-body">
+    <jhi-alert-error></jhi-alert-error>
+    <div class="mb-3">
+      <label class="form-label" jhiTranslate="userManagement.addChannel.channel">Channel</label>
+      <select class="form-control" name="channel" formControlName="channel" (change)="onSelectChannel()">
+        @for (channel of channels; track $index) {
+          <option [value]="channel">{{ 'inotificareApp.Channel.' + channel | translate }}</option>
+        }
+      </select>
+    </div>
+    <div class="mb-3">
+      @if (editForm.get('channel')?.value == channelEmail) {
+        <label class="form-label" jhiTranslate="userManagement.email">Email</label>
+        <input type="text" class="form-control" name="email" formControlName="email" />
+
+        @if (editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)) {
+          <div>
+            @if (editForm.get('email')?.errors?.maxlength) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: 100 }">
+                This field cannot be longer than 100 characters.</small
+              >
+            }
+          </div>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+      <span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button type="submit" [disabled]="editForm.invalid || isSaving" class="btn btn-info">
+      <span jhiTranslate="entity.action.save">Save</span>
+    </button>
+  </div>
+</form>

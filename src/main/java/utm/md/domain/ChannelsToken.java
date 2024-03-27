@@ -1,5 +1,6 @@
 package utm.md.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import java.io.Serializable;
@@ -38,6 +39,11 @@ public class ChannelsToken implements Serializable {
 
     @Column(name = "expiration_time")
     private Instant expirationTime;
+
+    @JsonIgnore
+    @OneToOne
+    @JoinColumn
+    private NotifySettings notifySettings;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -112,6 +118,14 @@ public class ChannelsToken implements Serializable {
 
     public void setChannel(Channel channel) {
         this.channel = channel;
+    }
+
+    public NotifySettings getNotifySettings() {
+        return notifySettings;
+    }
+
+    public void setNotifySettings(NotifySettings notifySettings) {
+        this.notifySettings = notifySettings;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

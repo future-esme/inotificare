@@ -1,70 +1,57 @@
 import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { TranslateService } from '@ngx-translate/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import SharedModule from 'app/shared/shared.module';
-import { AccountService } from 'app/core/auth/account.service';
-import { Account } from 'app/core/auth/account.model';
-import { LANGUAGES } from 'app/config/language.constants';
-
-const initialAccount: Account = {} as Account;
+import { User } from '../../entities/user/user.model';
+import { AccountService } from '../../core/auth/account.service';
+import SortByDirective from '../../shared/sort/sort-by.directive';
+import SortDirective from '../../shared/sort/sort.directive';
+import { ChannelToken, INotifySettings } from '../../entities/notify-settings/notify-settings.model';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import AddChannelDialogComponent from './add-channel/add-channel-dialog.component';
+import { Channel } from '../../entities/enumerations/channel.model';
+import dayjs from 'dayjs/esm';
 
 @Component({
   selector: 'jhi-settings',
   standalone: true,
-  imports: [SharedModule, FormsModule, ReactiveFormsModule],
+  imports: [SharedModule, FormsModule, ReactiveFormsModule, SortByDirective, SortDirective],
   templateUrl: './settings.component.html',
 })
 export default class SettingsComponent implements OnInit {
   success = false;
-  languages = LANGUAGES;
-
-  settingsForm = new FormGroup({
-    firstName: new FormControl(initialAccount.firstName, {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
-    }),
-    lastName: new FormControl(initialAccount.lastName, {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(1), Validators.maxLength(50)],
-    }),
-    email: new FormControl(initialAccount.email, {
-      nonNullable: true,
-      validators: [Validators.required, Validators.minLength(5), Validators.maxLength(254), Validators.email],
-    }),
-    langKey: new FormControl(initialAccount.langKey, { nonNullable: true }),
-
-    activated: new FormControl(initialAccount.activated, { nonNullable: true }),
-    authorities: new FormControl(initialAccount.authorities, { nonNullable: true }),
-    imageUrl: new FormControl(initialAccount.imageUrl, { nonNullable: true }),
-    login: new FormControl(initialAccount.login, { nonNullable: true }),
-  });
+  userProfile: User | null = null;
 
   constructor(
     private accountService: AccountService,
-    private translateService: TranslateService,
+    private modalService: NgbModal,
   ) {}
 
   ngOnInit(): void {
-    this.accountService.identity().subscribe(account => {
-      if (account) {
-        this.settingsForm.patchValue(account);
+    this.accountService.getUserProfile().subscribe(profile => {
+      this.userProfile = profile;
+    });
+  }
+
+  trackId = (_index: number, item: INotifySettings): string => item.id;
+
+  addChannel(): void {
+    const modalRef = this.modalService.open(AddChannelDialogComponent, { size: 'md', backdrop: 'static' });
+    // unsubscribe not needed because closed completes on modal close
+    modalRef.closed.subscribe(reason => {
+      if (reason) {
+        this.userProfile = reason;
       }
     });
   }
 
-  save(): void {
-    this.success = false;
+  hasToken(channel: Channel, channelToken?: ChannelToken): boolean {
+    return channelToken != undefined && channel !== Channel.EMAIL && dayjs(channelToken.expirationTime).isAfter(new Date());
+  }
 
-    const account = this.settingsForm.getRawValue();
-    this.accountService.save(account).subscribe(() => {
-      this.success = true;
-
-      this.accountService.authenticate(account);
-
-      if (account.langKey !== this.translateService.currentLang) {
-        this.translateService.use(account.langKey);
-      }
-    });
+  changeHidden(channelToken?: ChannelToken): void {
+    if (channelToken) {
+      channelToken.isHidden = !channelToken.isHidden;
+    }
   }
 }

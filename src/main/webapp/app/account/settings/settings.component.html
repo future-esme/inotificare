@@ -1,154 +1,88 @@
 <div>
   <div class="d-flex justify-content-center">
     <div class="col-md-8">
-      @if (settingsForm.value.login) {
-        <h2 jhiTranslate="settings.title" [translateValues]="{ username: settingsForm.value.login }">
-          User settings for [<strong>{{ settingsForm.value.login }}</strong
-          >]
-        </h2>
+      @if (userProfile) {
+        <div>
+          <h2><span jhiTranslate="userManagement.profile"></span></h2>
+          <hr />
+          <dl class="row-md jh-entity-details">
+            <dt><span jhiTranslate="userManagement.login"></span></dt>
+            <dd>
+              <span>{{ userProfile.login }}</span>
+            </dd>
+            <dt><span jhiTranslate="userManagement.firstName"></span></dt>
+            <dd>
+              <span>{{ userProfile.firstName }}</span>
+            </dd>
+            <dt><span jhiTranslate="userManagement.lastName"></span></dt>
+            <dd>
+              <span>{{ userProfile.lastName }}</span>
+            </dd>
+          </dl>
+        </div>
       }
 
-      @if (success) {
-        <div class="alert alert-success" jhiTranslate="settings.messages.success"><strong>Settings saved!</strong></div>
+      <h2><span jhiTranslate="userManagement.notifySettings"></span></h2>
+      <hr />
+
+      @if (userProfile?.notifySettings && (userProfile?.notifySettings)!.length > 0) {
+        <div class="table-responsive table-entities" id="entities">
+          <table class="table table-striped" aria-describedby="page-heading">
+            <thead>
+              <tr>
+                <th scope="col" class="col-md-4">
+                  <div class="d-flex">
+                    <span jhiTranslate="inotificareApp.notifySettings.channel">Channel</span>
+                  </div>
+                </th>
+                <th scope="col" class="col-md-4">
+                  <div class="d-flex">
+                    <span jhiTranslate="inotificareApp.notifySettings.status">Status</span>
+                  </div>
+                </th>
+                <th scope="col" class="col-md-4">
+                  <div class="d-flex">
+                    <span></span>
+                  </div>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (notifySettings of userProfile?.notifySettings; track trackId) {
+                <tr data-cy="entityTable">
+                  <td>
+                    <span>{{ 'inotificareApp.Channel.' + notifySettings.channel | translate }}</span>
+                  </td>
+                  <td>
+                    <span>{{ 'inotificareApp.NotifyChannelStatusEnum.' + notifySettings.status | translate }}</span>
+                  </td>
+                  <td>
+                    @if (hasToken(notifySettings.channel, notifySettings.channelsToken)) {
+                      <button class="btn btn-info btn-sm" (click)="changeHidden(notifySettings.channelsToken)">
+                        <fa-icon icon="eye"></fa-icon>
+                      </button>
+                      <span [hidden]="notifySettings.channelsToken?.isHidden == undefined || !notifySettings.channelsToken?.isHidden">
+                        {{ notifySettings.channelsToken?.token }}
+                      </span>
+                    }
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       }
 
+      <div class="mb-3">
+        @if (!userProfile?.notifySettings || (userProfile?.notifySettings)!.length == 0) {
+          <div jhiTranslate="userManagement.addChannel.noSettings" class="alert alert-info"></div>
+        }
+        <div class="text-center">
+          <button jhiTranslate="userManagement.addChannel.addChannel" type="submit" class="btn btn-info" (click)="addChannel()"></button>
+        </div>
+      </div>
       <jhi-alert-error></jhi-alert-error>
-
-      @if (settingsForm.value.login) {
-        <form name="form" role="form" (ngSubmit)="save()" [formGroup]="settingsForm" novalidate>
-          <div class="mb-3">
-            <label class="form-label" for="firstName" jhiTranslate="settings.form.firstname">First Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="firstName"
-              name="firstName"
-              placeholder="{{ 'settings.form.firstname.placeholder' | translate }}"
-              formControlName="firstName"
-              data-cy="firstname"
-            />
-
-            @if (
-              settingsForm.get('firstName')!.invalid && (settingsForm.get('firstName')!.dirty || settingsForm.get('firstName')!.touched)
-            ) {
-              <div>
-                @if (settingsForm.get('firstName')?.errors?.required) {
-                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.firstname.required"
-                    >Your first name is required.</small
-                  >
-                }
-
-                @if (settingsForm.get('firstName')?.errors?.minlength) {
-                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.firstname.minlength"
-                    >Your first name is required to be at least 1 character</small
-                  >
-                }
-
-                @if (settingsForm.get('firstName')?.errors?.maxlength) {
-                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.firstname.maxlength"
-                    >Your first name cannot be longer than 50 characters</small
-                  >
-                }
-              </div>
-            }
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label" for="lastName" jhiTranslate="settings.form.lastname">Last Name</label>
-            <input
-              type="text"
-              class="form-control"
-              id="lastName"
-              name="lastName"
-              placeholder="{{ 'settings.form.lastname.placeholder' | translate }}"
-              formControlName="lastName"
-              data-cy="lastname"
-            />
-
-            @if (settingsForm.get('lastName')!.invalid && (settingsForm.get('lastName')!.dirty || settingsForm.get('lastName')!.touched)) {
-              <div>
-                @if (settingsForm.get('lastName')?.errors?.required) {
-                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.lastname.required"
-                    >Your last name is required.</small
-                  >
-                }
-
-                @if (settingsForm.get('lastName')?.errors?.minlength) {
-                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.lastname.minlength"
-                    >Your last name is required to be at least 1 character</small
-                  >
-                }
-
-                @if (settingsForm.get('lastName')?.errors?.maxlength) {
-                  <small class="form-text text-danger" jhiTranslate="settings.messages.validate.lastname.maxlength"
-                    >Your last name cannot be longer than 50 characters</small
-                  >
-                }
-              </div>
-            }
-          </div>
-
-          <div class="mb-3">
-            <label class="form-label" for="email" jhiTranslate="global.form.email.label">Email</label>
-            <input
-              type="email"
-              class="form-control"
-              id="email"
-              name="email"
-              placeholder="{{ 'global.form.email.placeholder' | translate }}"
-              formControlName="email"
-              data-cy="email"
-            />
-
-            @if (settingsForm.get('email')!.invalid && (settingsForm.get('email')!.dirty || settingsForm.get('email')!.touched)) {
-              <div>
-                @if (settingsForm.get('email')?.errors?.required) {
-                  <small class="form-text text-danger" jhiTranslate="global.messages.validate.email.required"
-                    >Your email is required.</small
-                  >
-                }
-
-                @if (settingsForm.get('email')?.errors?.email) {
-                  <small class="form-text text-danger" jhiTranslate="global.messages.validate.email.invalid">Your email is invalid.</small>
-                }
-
-                @if (settingsForm.get('email')?.errors?.minlength) {
-                  <small class="form-text text-danger" jhiTranslate="global.messages.validate.email.minlength"
-                    >Your email is required to be at least 5 characters.</small
-                  >
-                }
-
-                @if (settingsForm.get('email')?.errors?.maxlength) {
-                  <small class="form-text text-danger" jhiTranslate="global.messages.validate.email.maxlength"
-                    >Your email cannot be longer than 50 characters.</small
-                  >
-                }
-              </div>
-            }
-          </div>
-
-          @if (languages && languages.length > 0) {
-            <div class="mb-3">
-              <label for="langKey" jhiTranslate="settings.form.language">Language</label>
-              <select class="form-control" id="langKey" name="langKey" formControlName="langKey" data-cy="langKey">
-                @for (language of languages; track $index) {
-                  <option [value]="language">{{ language | findLanguageFromKey }}</option>
-                }
-              </select>
-            </div>
-          }
-
-          <button
-            type="submit"
-            [disabled]="settingsForm.invalid"
-            class="btn btn-primary"
-            jhiTranslate="settings.form.button"
-            data-cy="submit"
-          >
-            Save
-          </button>
-        </form>
-      }
+      <jhi-alert></jhi-alert>
     </div>
   </div>
 </div>

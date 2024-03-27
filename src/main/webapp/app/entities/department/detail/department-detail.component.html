@@ -23,7 +23,7 @@
           <dd>
             @if (department.departmentAdmin) {
               <div>
-                <a [routerLink]="['/user-internal', department.departmentAdmin.id, 'view']">{{ department.departmentAdmin.id }}</a>
+                {{ department.departmentAdmin.firstName + ' ' + department.departmentAdmin.lastName }}
               </div>
             }
           </dd>
