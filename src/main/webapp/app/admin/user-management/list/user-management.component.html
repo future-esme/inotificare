@@ -22,17 +22,12 @@
       <table class="table table-striped" aria-describedby="user-management-page-heading">
         <thead>
           <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="transition()">
-            <th scope="col" jhiSortBy="id"><span jhiTranslate="global.field.id">ID</span> <fa-icon icon="sort"></fa-icon></th>
-            <th scope="col" jhiSortBy="login"><span jhiTranslate="userManagement.login">Login</span> <fa-icon icon="sort"></fa-icon></th>
+            <th scope="col">
+              <span>{{ 'userManagement.lastName' | translate }} {{ 'userManagement.firstName' | translate }}</span>
+            </th>
             <th scope="col"><span jhiTranslate="userManagement.profiles">Profiles</span></th>
             <th scope="col" jhiSortBy="createdDate">
               <span jhiTranslate="userManagement.createdDate">Created date</span> <fa-icon icon="sort"></fa-icon>
-            </th>
-            <th scope="col" jhiSortBy="lastModifiedBy">
-              <span jhiTranslate="userManagement.lastModifiedBy">Modified by</span> <fa-icon icon="sort"></fa-icon>
-            </th>
-            <th scope="col" jhiSortBy="lastModifiedDate">
-              <span jhiTranslate="userManagement.lastModifiedDate">Modified date</span> <fa-icon icon="sort"></fa-icon>
             </th>
             <th scope="col"></th>
           </tr>
@@ -41,20 +36,15 @@
           <tbody>
             @for (user of users; track trackIdentity) {
               <tr>
-                <td>
-                  <a [routerLink]="['./', user.login, 'view']">{{ user.id }}</a>
-                </td>
-                <td>{{ user.login }}</td>
+                <td>{{ user.lastName + ' ' + user.firstName }}</td>
                 <td>
                   @for (authority of user.authorities; track $index) {
                     <div>
-                      <span class="badge bg-info">{{ authority }}</span>
+                      <span class="badge bg-info">{{ 'authorities.' + authority | translate }}</span>
                     </div>
                   }
                 </td>
-                <td>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</td>
-                <td>{{ user.lastModifiedBy }}</td>
-                <td>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</td>
+                <td>{{ user.createdDate | date: 'dd.MM.yy HH:mm' }}</td>
                 <td class="text-end">
                   <div class="btn-group">
                     <button type="submit" [routerLink]="['./', user.login, 'view']" class="btn btn-info btn-sm">

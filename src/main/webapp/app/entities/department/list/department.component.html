@@ -1,24 +1,19 @@
 <div>
-  <h2 id="page-heading" data-cy="DepartmentHeading">
+  <h3 id="page-heading" data-cy="DepartmentHeading">
     <span jhiTranslate="inotificareApp.department.home.title">Departments</span>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="inotificareApp.department.home.refreshListLabel">Refresh list</span>
-      </button>
-
+    <div class="d-flex float-end">
       <button
         id="jh-create-entity"
         data-cy="entityCreateButton"
         class="btn btn-primary jh-create-entity create-department"
-        [routerLink]="['/department/new']"
+        [routerLink]="['/departments/new']"
       >
         <fa-icon icon="plus"></fa-icon>
         <span jhiTranslate="inotificareApp.department.home.createLabel">Create a new Department</span>
       </button>
     </div>
-  </h2>
+  </h3>
 
   <jhi-alert-error></jhi-alert-error>
 

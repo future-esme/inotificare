@@ -1,52 +1,80 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
+<section style="background-color: #eee">
+  <div class="container py-3">
     @if (user) {
-      <div>
-        <h2>
-          <span jhiTranslate="userManagement.detail.title">User</span> [<strong>{{ user.login }}</strong
-          >]
-        </h2>
-
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="userManagement.login">Login</span></dt>
-          <dd>
-            <span>{{ user.login }}</span>
-          </dd>
-
-          <dt><span jhiTranslate="userManagement.firstName">First name</span></dt>
-          <dd>{{ user.firstName }}</dd>
-
-          <dt><span jhiTranslate="userManagement.lastName">Last name</span></dt>
-          <dd>{{ user.lastName }}</dd>
-
-          <dt><span jhiTranslate="userManagement.createdBy">Created by</span></dt>
-          <dd>{{ user.createdBy }}</dd>
-
-          <dt><span jhiTranslate="userManagement.createdDate">Created date</span></dt>
-          <dd>{{ user.createdDate | date: 'dd/MM/yy HH:mm' }}</dd>
-
-          <dt><span jhiTranslate="userManagement.lastModifiedBy">Modified by</span></dt>
-          <dd>{{ user.lastModifiedBy }}</dd>
-
-          <dt><span jhiTranslate="userManagement.lastModifiedDate">Modified date</span></dt>
-          <dd>{{ user.lastModifiedDate | date: 'dd/MM/yy HH:mm' }}</dd>
-
-          <dt><span jhiTranslate="userManagement.profiles">Profiles</span></dt>
-          <dd>
-            <ul class="list-unstyled">
-              @for (authority of user.authorities; track $index) {
-                <li>
-                  <span class="badge bg-info">{{ authority }}</span>
-                </li>
-              }
-            </ul>
-          </dd>
-        </dl>
-
-        <button type="submit" routerLink="../../" class="btn btn-info">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
+      <div class="row pb-2">
+        <div class="col justify-content-center d-flex">
+          <h3>
+            <span jhiTranslate="userManagement.detail.title">User</span> [<strong>{{ user.login }}</strong
+            >]
+          </h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                alt="avatar"
+                class="rounded-circle img-fluid"
+                style="width: 150px"
+              />
+              <h5 class="my-3">{{ user.lastName + ' ' + user.firstName }}</h5>
+              <p class="text-muted mb-1">{{ user.login }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-4">
+                  <p class="mb-0" jhiTranslate="userManagement.createdBy"></p>
+                </div>
+                <div class="col-sm-8">
+                  <p class="mb-0 text-muted">{{ user.createdBy }}</p>
+                </div>
+                <hr />
+                <div class="col-sm-4">
+                  <p class="mb-0" jhiTranslate="userManagement.createdDate"></p>
+                </div>
+                <div class="col-sm-8">
+                  <p class="mb-0 text-muted">{{ user.createdDate | date: 'dd.MM.yy HH:mm' }}</p>
+                </div>
+                <hr />
+                <div class="col-sm-4">
+                  <p class="mb-0" jhiTranslate="userManagement.lastModifiedBy"></p>
+                </div>
+                <div class="col-sm-8">
+                  <p class="mb-0 text-muted">{{ user.lastModifiedBy | date: 'dd.MM.yy HH:mm' }}</p>
+                </div>
+                <hr />
+                <div class="col-sm-4">
+                  <p class="mb-0" jhiTranslate="userManagement.profiles"></p>
+                </div>
+                <div class="col-sm-8">
+                  <ul class="list-unstyled">
+                    @for (authority of user.authorities; track $index) {
+                      <li>
+                        <span class="badge bg-info">{{ 'authorities.' + authority | translate }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="text-center">
+              <button type="submit" routerLink="../../" class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+              </button>
+            </div>
+          </div>
+          <jhi-alert-error></jhi-alert-error>
+          <jhi-alert></jhi-alert>
+        </div>
       </div>
     }
   </div>
-</div>
+</section>

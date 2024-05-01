@@ -142,5 +142,18 @@
       "not.image": "Файл должен был быть изображением, но было установлено, что \"{{ fileType }}\""
     }
   },
-  "footer": "Это ваш футтер"
+  "footer": {
+    "copyright": "© 2024 Echipa INotificare",
+    "maintainers": "Creat și menținut de ",
+    "maintainerList": {
+      "first": {
+        "name": "Tulbu Gabriela",
+        "link": "https://www.linkedin.com/in/tulbu-gabriela-908ab11ba/"
+      },
+      "second": {
+        "name": "Munteanu Iulian",
+        "link": "https://www.linkedin.com/in/munteanu-iulian-08526b263/"
+      }
+    }
+  }
 }

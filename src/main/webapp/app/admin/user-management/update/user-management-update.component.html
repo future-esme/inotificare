@@ -12,7 +12,7 @@
 
       <div class="mb-3">
         <label class="form-label" jhiTranslate="userManagement.login">Login</label>
-        <input type="text" class="form-control" name="login" formControlName="login" />
+        <input type="text" class="form-control" name="login" formControlName="login" maxlength="50" />
 
         @if (editForm.get('login')!.invalid && (editForm.get('login')!.dirty || editForm.get('login')!.touched)) {
           <div>
@@ -37,7 +37,7 @@
 
       <div class="mb-3">
         <label class="form-label" jhiTranslate="userManagement.firstName">First name</label>
-        <input type="text" class="form-control" name="firstName" formControlName="firstName" />
+        <input type="text" class="form-control" name="firstName" formControlName="firstName" maxlength="50" />
 
         @if (editForm.get('firstName')!.invalid && (editForm.get('firstName')!.dirty || editForm.get('firstName')!.touched)) {
           <div>
@@ -52,7 +52,7 @@
 
       <div class="mb-3">
         <label jhiTranslate="userManagement.lastName">Last name</label>
-        <input type="text" class="form-control" name="lastName" formControlName="lastName" />
+        <input type="text" class="form-control" name="lastName" formControlName="lastName" maxlength="50" />
 
         @if (editForm.get('lastName')!.invalid && (editForm.get('lastName')!.dirty || editForm.get('lastName')!.touched)) {
           <div>
@@ -67,7 +67,7 @@
 
       <div class="mb-3" [hidden]="!isCreate">
         <label jhiTranslate="userManagement.email">Email</label>
-        <input type="text" class="form-control" name="email" formControlName="email" />
+        <input type="text" class="form-control" name="email" formControlName="email" maxlength="100" />
 
         @if (editForm.get('email')!.invalid && (editForm.get('email')!.dirty || editForm.get('email')!.touched)) {
           <div>
@@ -84,7 +84,7 @@
         <label jhiTranslate="userManagement.profiles">Profiles</label>
         <select class="form-control" multiple name="authority" formControlName="authorities">
           @for (authority of authorities; track $index) {
-            <option [value]="authority">{{ authority }}</option>
+            <option [value]="authority">{{ 'authorities.' + authority | translate }}</option>
           }
         </select>
       </div>

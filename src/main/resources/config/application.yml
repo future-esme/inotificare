@@ -208,3 +208,13 @@ jhipster:
 # More documentation is available at:
 # https://www.jhipster.tech/common-application-properties/
 # ===================================================================
+
+application:
+  minio:
+    uri: http://127.0.0.1:9000
+    access-key: access_key
+    secret-key: secret_key
+    bucket-name: qr-code
+    qr-code:
+      telegram: qrcode_telegram_inotificare.png
+      viber: qrcode_viber_inotificare.png

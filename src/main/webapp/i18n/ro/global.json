@@ -158,5 +158,18 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "Acesta este subsolul paginii dumneavoastră"
+  "footer": {
+    "copyright": "© 2024 Echipa INotificare",
+    "maintainers": "Creat și menținut de ",
+    "maintainerList": {
+      "first": {
+        "name": "Tulbu Gabriela",
+        "link": "https://www.linkedin.com/in/tulbu-gabriela-908ab11ba/"
+      },
+      "second": {
+        "name": "Munteanu Iulian",
+        "link": "https://www.linkedin.com/in/munteanu-iulian-08526b263/"
+      }
+    }
+  }
 }

@@ -1,4 +1,4 @@
-import { IUser } from '../user/user.model';
+import { IUser } from '../../admin/user-management/user-management.model';
 
 export interface IDepartment {
   id: string;

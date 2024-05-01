@@ -27,5 +27,9 @@
     "createdDate": "Дата создания",
     "lastModifiedBy": "Изменено",
     "lastModifiedDate": "Дата изменения"
+  },
+  "authorities": {
+    "ROLE_USER": "Angajat",
+    "ROLE_ADMIN": "Administrator"
   }
 }

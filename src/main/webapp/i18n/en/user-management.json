@@ -27,5 +27,9 @@
     "createdDate": "Created date",
     "lastModifiedBy": "Modified by",
     "lastModifiedDate": "Modified date"
+  },
+  "authorities": {
+    "ROLE_USER": "Angajat",
+    "ROLE_ADMIN": "Administrator"
   }
 }

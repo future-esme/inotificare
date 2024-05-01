@@ -1,12 +1,11 @@
 package utm.md.service;
 
+import static java.util.Objects.nonNull;
 import static utm.md.domain.enumeration.Channel.EMAIL;
 import static utm.md.util.ActivationTokenGeneratorUtil.getOtpKey;
 
-import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
-import java.time.temporal.ChronoUnit;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
@@ -15,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import utm.md.config.ApplicationProperties;
 import utm.md.domain.ChannelUserCredentials;
 import utm.md.domain.ChannelsToken;
 import utm.md.domain.NotifySettings;
@@ -27,6 +27,7 @@ import utm.md.repository.NotifySettingsRepository;
 import utm.md.repository.UserRepository;
 import utm.md.security.SecurityUtils;
 import utm.md.web.rest.errors.BadRequestAlertException;
+import utm.md.web.rest.errors.NotFoundAlertException;
 
 /**
  * Service Implementation for managing {@link utm.md.domain.NotifySettings}.
@@ -42,19 +43,25 @@ public class NotifySettingsService {
     private final ChannelsTokenRepository channelsTokenRepository;
     private final UserRepository userRepository;
     private final SendKeyMailService mailService;
+    private final MinioService minioService;
+    private final ApplicationProperties applicationProperties;
 
     public NotifySettingsService(
         NotifySettingsRepository notifySettingsRepository,
         ChannelUserCredentialsRepository credentialsRepository,
         ChannelsTokenRepository channelsTokenRepository,
         UserRepository userRepository,
-        SendKeyMailService mailService
+        SendKeyMailService mailService,
+        MinioService minioService,
+        ApplicationProperties applicationProperties
     ) {
         this.notifySettingsRepository = notifySettingsRepository;
         this.credentialsRepository = credentialsRepository;
         this.channelsTokenRepository = channelsTokenRepository;
         this.userRepository = userRepository;
         this.mailService = mailService;
+        this.minioService = minioService;
+        this.applicationProperties = applicationProperties;
     }
 
     /**
@@ -146,6 +153,20 @@ public class NotifySettingsService {
             }
         }
         throw new BadRequestAlertException("Invalid change status request", "notifySettings", "badRequest");
+    }
+
+    public byte[] getQrCode(Channel channel) {
+        log.debug("Get qr code for bot from {}", channel.name());
+        String objectName = null;
+        switch (channel) {
+            case TELEGRAM -> objectName = applicationProperties.minio().qrCode().telegram();
+            case VIBER -> objectName = applicationProperties.minio().qrCode().viber();
+        }
+        if (nonNull(objectName)) {
+            return minioService.getObjectByPath(objectName);
+        } else {
+            throw new NotFoundAlertException("Not found qr code for this channel", "notifySettings", "notFound");
+        }
     }
 
     private ChannelUserCredentials createCredentials(String channel, String email) {

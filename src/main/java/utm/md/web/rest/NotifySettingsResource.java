@@ -1,31 +1,24 @@
 package utm.md.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
-import utm.md.domain.ChannelUserCredentials;
 import utm.md.domain.NotifySettings;
 import utm.md.domain.User;
-import utm.md.repository.NotifySettingsRepository;
+import utm.md.domain.enumeration.Channel;
 import utm.md.service.NotifySettingsQueryService;
 import utm.md.service.NotifySettingsService;
 import utm.md.service.criteria.NotifySettingsCriteria;
-import utm.md.web.rest.errors.BadRequestAlertException;
 
 /**
  * REST controller for managing {@link utm.md.domain.NotifySettings}.
@@ -35,11 +28,6 @@ import utm.md.web.rest.errors.BadRequestAlertException;
 public class NotifySettingsResource {
 
     private final Logger log = LoggerFactory.getLogger(NotifySettingsResource.class);
-
-    private static final String ENTITY_NAME = "notifySettings";
-
-    @Value("${jhipster.clientApp.name}")
-    private String applicationName;
 
     private final NotifySettingsService notifySettingsService;
 
@@ -98,6 +86,13 @@ public class NotifySettingsResource {
         log.debug("REST request to get NotifySettings : {}", id);
         var user = notifySettingsService.changeStatusNotifySettings(id);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/qr-code/{channel}")
+    public ResponseEntity<byte[]> getQrCode(@PathVariable("channel") Channel channel) {
+        log.debug("REST request to get qr code for channel {}", channel);
+        var image = notifySettingsService.getQrCode(channel);
+        return ResponseEntity.ok(image);
     }
 
     /**

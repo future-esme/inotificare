@@ -1,62 +1,53 @@
-<div>
-  <div class="d-flex justify-content-center">
-    <div class="col-md-8">
-      @if (userProfile) {
-        <div>
-          <h2><span jhiTranslate="userManagement.profile"></span></h2>
-          <hr />
-          <dl class="row-md jh-entity-details">
-            <dt><span jhiTranslate="userManagement.login"></span></dt>
-            <dd>
-              <span>{{ userProfile.login }}</span>
-            </dd>
-            <dt><span jhiTranslate="userManagement.firstName"></span></dt>
-            <dd>
-              <span>{{ userProfile.firstName }}</span>
-            </dd>
-            <dt><span jhiTranslate="userManagement.lastName"></span></dt>
-            <dd>
-              <span>{{ userProfile.lastName }}</span>
-            </dd>
-          </dl>
+<section style="background-color: #eee">
+  <div class="container py-3">
+    <div class="row pb-2">
+      <div class="col justify-content-center d-flex">
+        <h3><span jhiTranslate="userManagement.profile"></span></h3>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          @if (userProfile) {
+            <div class="card-body text-center">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-chat/ava3.webp"
+                alt="avatar"
+                class="rounded-circle img-fluid"
+                style="width: 150px"
+              />
+              <h5 class="my-3">{{ userProfile.lastName + ' ' + userProfile.firstName }}</h5>
+              <p class="text-muted mb-1">{{ userProfile.login }}</p>
+            </div>
+          }
         </div>
-      }
-
-      <h2><span jhiTranslate="userManagement.notifySettings"></span></h2>
-      <hr />
-
-      @if (userProfile?.notifySettings && (userProfile?.notifySettings)!.length > 0) {
-        <div class="table-responsive table-entities" id="entities">
-          <table class="table table-striped" aria-describedby="page-heading">
-            <thead>
-              <tr>
-                <th scope="col" class="col-md-4">
-                  <div class="d-flex">
-                    <span jhiTranslate="inotificareApp.notifySettings.channel">Channel</span>
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-12">
+                <h5 class="mb-2" jhiTranslate="userManagement.notifySettings"></h5>
+              </div>
+              <hr />
+              @if (userProfile?.notifySettings && (userProfile?.notifySettings)!.length > 0) {
+                @for (notifySettings of userProfile?.notifySettings; track trackId) {
+                  <div class="col-sm-4">
+                    <p class="mb-0">{{ 'inotificareApp.Channel.' + notifySettings.channel | translate }}</p>
                   </div>
-                </th>
-                <th scope="col" class="col-md-4">
-                  <div class="d-flex">
-                    <span jhiTranslate="inotificareApp.notifySettings.status">Status</span>
+                  <div class="col-sm-4">
+                    @if (notifySettings.status === 'ON') {
+                      <p class="mb-0 badge bg-success">
+                        {{ 'inotificareApp.NotifyChannelStatusEnum.' + notifySettings.status | translate }}
+                      </p>
+                    }
+                    @if (notifySettings.status === 'OFF') {
+                      <p class="mb-0 badge bg-warning">
+                        {{ 'inotificareApp.NotifyChannelStatusEnum.' + notifySettings.status | translate }}
+                      </p>
+                    }
                   </div>
-                </th>
-                <th scope="col" class="col-md-4">
-                  <div class="d-flex">
-                    <span></span>
-                  </div>
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (notifySettings of userProfile?.notifySettings; track trackId) {
-                <tr data-cy="entityTable">
-                  <td>
-                    <span>{{ 'inotificareApp.Channel.' + notifySettings.channel | translate }}</span>
-                  </td>
-                  <td>
-                    <span>{{ 'inotificareApp.NotifyChannelStatusEnum.' + notifySettings.status | translate }}</span>
-                  </td>
-                  <td>
+                  <div class="col-sm-4">
                     @if (hasToken(notifySettings.channel, notifySettings.channelsToken)) {
                       <button class="btn btn-info btn-sm" (click)="changeHidden(notifySettings.channelsToken)">
                         <fa-icon icon="eye"></fa-icon>
@@ -65,24 +56,28 @@
                         {{ notifySettings.channelsToken?.token }}
                       </span>
                     }
-                  </td>
-                </tr>
+                  </div>
+                }
               }
-            </tbody>
-          </table>
+            </div>
+          </div>
         </div>
-      }
-
-      <div class="mb-3">
-        @if (!userProfile?.notifySettings || (userProfile?.notifySettings)!.length == 0) {
-          <div jhiTranslate="userManagement.addChannel.noSettings" class="alert alert-info"></div>
-        }
-        <div class="text-center">
-          <button jhiTranslate="userManagement.addChannel.addChannel" type="submit" class="btn btn-info" (click)="addChannel()"></button>
+        <div class="mb-3">
+          @if (!userProfile?.notifySettings || (userProfile?.notifySettings)!.length == 0) {
+            <div jhiTranslate="userManagement.addChannel.noSettings" class="alert alert-info"></div>
+          }
+          <div class="text-center">
+            <button
+              jhiTranslate="userManagement.addChannel.addChannel"
+              type="submit"
+              class="btn btn-primary"
+              (click)="addChannel()"
+            ></button>
+          </div>
         </div>
+        <jhi-alert-error></jhi-alert-error>
+        <jhi-alert></jhi-alert>
       </div>
-      <jhi-alert-error></jhi-alert-error>
-      <jhi-alert></jhi-alert>
     </div>
   </div>
-</div>
+</section>

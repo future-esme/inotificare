@@ -3,7 +3,7 @@
     <div class="modal-header">
       <h4 class="modal-title" data-cy="departmentDeleteDialogHeading" jhiTranslate="entity.delete.title">Confirm delete operation</h4>
 
-      <button type="button" class="btn-close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+      <button type="button" class="btn-close" data-dismiss="modal" aria-hidden="true" (click)="cancel()"></button>
     </div>
 
     <div class="modal-body">
@@ -11,9 +11,9 @@
       <p
         id="jhi-delete-department-heading"
         jhiTranslate="inotificareApp.department.delete.question"
-        [translateValues]="{ id: department.id }"
+        [translateValues]="{ id: department.title }"
       >
-        Are you sure you want to delete Department {{ department.id }}?
+        Are you sure you want to delete Department {{ department.title }}?
       </p>
     </div>
 
