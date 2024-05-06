@@ -9,8 +9,9 @@ import SortDirective from '../../shared/sort/sort.directive';
 import { ChannelToken, INotifySettings } from '../../entities/notify-settings/notify-settings.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import AddChannelDialogComponent from './add-channel/add-channel-dialog.component';
-import { Channel } from '../../entities/enumerations/channel.model';
+import { ActiveChannel, Channel } from '../../entities/enumerations/channel.model';
 import dayjs from 'dayjs/esm';
+import { QrCodeModalComponent } from './qr-code/qr-code.modal.component';
 
 @Component({
   selector: 'jhi-settings',
@@ -21,6 +22,7 @@ import dayjs from 'dayjs/esm';
 export default class SettingsComponent implements OnInit {
   success = false;
   userProfile: User | null = null;
+  protected channels: string[] = Object.values(ActiveChannel);
 
   constructor(
     private accountService: AccountService,
@@ -52,6 +54,14 @@ export default class SettingsComponent implements OnInit {
   changeHidden(channelToken?: ChannelToken): void {
     if (channelToken) {
       channelToken.isHidden = !channelToken.isHidden;
+    }
+  }
+
+  displayQrCode(channel: string): void {
+    if (channel === 'VIBER' || channel === 'TELEGRAM') {
+      const modalRef = this.modalService.open(QrCodeModalComponent, { size: 'md', backdrop: 'static' });
+      modalRef.componentInstance.channel = channel;
+      modalRef.closed.subscribe(() => {});
     }
   }
 }

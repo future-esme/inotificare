@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -92,7 +93,7 @@ public class NotifySettingsResource {
     public ResponseEntity<byte[]> getQrCode(@PathVariable("channel") Channel channel) {
         log.debug("REST request to get qr code for channel {}", channel);
         var image = notifySettingsService.getQrCode(channel);
-        return ResponseEntity.ok(image);
+        return ResponseEntity.ok().contentType(MediaType.valueOf("image/png")).body(image);
     }
 
     /**

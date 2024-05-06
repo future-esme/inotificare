@@ -9,6 +9,14 @@
       "language": "Limbă",
       "button": "Salvare"
     },
+    "qrCode": {
+      "modal.title": "Qr cod către canalul de ",
+      "info": "Scanați codul",
+      "channels": {
+        "VIBER": "Viber",
+        "TELEGRAM": "Telegram"
+      }
+    },
     "messages": {
       "error": {
         "fail": "<strong>Eroare!</strong> Setările nu au putut fi salvate.",

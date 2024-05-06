@@ -4,7 +4,7 @@ import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
 import { SettingsService } from '../settings.service';
-import { Channel } from '../../../entities/enumerations/channel.model';
+import { ActiveChannel, Channel } from '../../../entities/enumerations/channel.model';
 
 @Component({
   standalone: true,
@@ -13,7 +13,7 @@ import { Channel } from '../../../entities/enumerations/channel.model';
   imports: [SharedModule, FormsModule, ReactiveFormsModule],
 })
 export default class AddChannelDialogComponent {
-  channels = Object.values(Channel);
+  channels = Object.values(ActiveChannel);
   channelEmail = Channel.EMAIL;
   isSaving = false;
   editForm = new FormGroup({

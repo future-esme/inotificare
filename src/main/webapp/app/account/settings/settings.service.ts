@@ -22,4 +22,8 @@ export class SettingsService {
       observe: 'response',
     });
   }
+
+  getQrFile(channel: Channel): Observable<any> {
+    return this.http.get(`api/notify-settings/qr-code/${channel}`, { responseType: 'blob', observe: 'response' });
+  }
 }
