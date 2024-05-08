@@ -1,5 +1,9 @@
 package utm.md.service;
 
+import static java.util.Objects.nonNull;
+
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -8,10 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import utm.md.domain.Notification;
 import utm.md.domain.RequestData;
+import utm.md.domain.enumeration.Channel;
+import utm.md.domain.enumeration.MessageStatus;
+import utm.md.repository.NotificationRepository;
 import utm.md.repository.RequestDataRepository;
+import utm.md.service.dto.*;
+import utm.md.web.rest.errors.NotFoundException;
+import utm.md.worker.NotificationEventPublisher;
 
 /**
  * Service Implementation for managing {@link utm.md.domain.RequestData}.
@@ -23,9 +35,26 @@ public class RequestDataService {
     private final Logger log = LoggerFactory.getLogger(RequestDataService.class);
 
     private final RequestDataRepository requestDataRepository;
+    private final NotificationRepository notificationRepository;
+    private final NotificationEventPublisher notificationEventPublisher;
 
-    public RequestDataService(RequestDataRepository requestDataRepository) {
+    public RequestDataService(
+        RequestDataRepository requestDataRepository,
+        NotificationRepository notificationRepository,
+        NotificationEventPublisher notificationEventPublisher
+    ) {
         this.requestDataRepository = requestDataRepository;
+        this.notificationRepository = notificationRepository;
+        this.notificationEventPublisher = notificationEventPublisher;
+    }
+
+    public RequestDataApiDTO fetchRequestData(UUID id) {
+        log.info("Fetching request data for id {}", id);
+        var requestData = requestDataRepository.findById(id);
+        if (requestData.isEmpty()) {
+            throw new NotFoundException("Reqeust not found", "RequestData");
+        }
+        return new RequestDataApiDTO(requestData.get());
     }
 
     /**
@@ -102,19 +131,6 @@ public class RequestDataService {
     }
 
     /**
-     *  Get all the requestData where Notification is {@code null}.
-     *  @return the list of entities.
-     */
-    @Transactional(readOnly = true)
-    public List<RequestData> findAllWhereNotificationIsNull() {
-        log.debug("Request to get all requestData where Notification is null");
-        return StreamSupport
-            .stream(requestDataRepository.findAll().spliterator(), false)
-            .filter(requestData -> requestData.getNotifications() == null)
-            .toList();
-    }
-
-    /**
      * Get one requestData by id.
      *
      * @param id the id of the entity.
@@ -134,5 +150,113 @@ public class RequestDataService {
     public void delete(UUID id) {
         log.debug("Request to delete RequestData : {}", id);
         requestDataRepository.deleteById(id);
+    }
+
+    public SendNotificationResponse handleRequest(RequestDataDTO requestDataDTO) {
+        log.info("Received request to send notifications");
+        SendNotificationResponse response = new SendNotificationResponse();
+        try {
+            var requestDataEntity = createRequestData(requestDataDTO);
+            response.setRequestId(requestDataEntity.getId());
+            response.setRequestData(requestDataEntity);
+            if (
+                !nonNull(requestDataDTO.getRecipientType()) ||
+                !nonNull(requestDataDTO.getRecipients()) ||
+                requestDataDTO.getRecipients().isEmpty()
+            ) {
+                response.isInvalidRequest();
+            } else {
+                response.isSuccess();
+            }
+        } catch (Exception e) {
+            response.isInvalidRequest();
+        }
+        return response;
+    }
+
+    @Async
+    public void handleRequest(RequestDataDTO requestDataDTO, RequestData requestDataEntity) {
+        log.info("Asynchronously process and send notifications");
+        List<IUserRequestDataDTO> recipientsData =
+            switch (requestDataDTO.getRecipientType()) {
+                case DEPARTMENT -> requestDataRepository.findRecipientsByDepartmentIds(requestDataDTO.getRecipients());
+                case USER -> requestDataRepository.findRecipientsByUserIds(requestDataDTO.getRecipients());
+            };
+        var notifications = createNotificationEntities(requestDataEntity, recipientsData);
+        updateRequestData(requestDataEntity, MessageStatus.PROCESSED);
+        createAndPublishNotifications(recipientsData, requestDataDTO);
+        updateRequestData(requestDataEntity, MessageStatus.PENDING);
+        updateStatusNotifications(notifications, MessageStatus.PENDING);
+        //somewhere will be the confirmation implementation and status tp each message sent to queue will be confirmed individualy
+        updateRequestData(requestDataEntity, MessageStatus.SENT);
+        updateStatusNotifications(notifications, MessageStatus.SENT);
+    }
+
+    private RequestData createRequestData(RequestDataDTO requestDataDTO) {
+        var requestData = new RequestData();
+        requestData
+            .channel(Channel.DEFAULT)
+            .recipientType(requestDataDTO.getRecipientType())
+            .priority(requestDataDTO.getPriority())
+            .content(requestDataDTO.getContent())
+            .messageStatus(MessageStatus.UNPROCESSED)
+            .createdTime(Instant.now());
+        if (nonNull(requestDataDTO.getRecipients())) {
+            requestData.recipients(requestDataDTO.getRecipients().toString());
+        }
+        return requestDataRepository.save(requestData);
+    }
+
+    private void updateRequestData(RequestData requestData, MessageStatus status) {
+        requestData.setMessageStatus(status);
+        requestDataRepository.save(requestData);
+    }
+
+    private List<Notification> createNotificationEntities(RequestData requestData, List<IUserRequestDataDTO> recipients) {
+        log.info("Create notifications");
+        List<Notification> notificationsToSend = new ArrayList<>();
+        for (var recipient : recipients) {
+            var notification = new Notification();
+            notification
+                .content(requestData.getContent())
+                .status(MessageStatus.PROCESSED)
+                .recipientId(UUID.fromString(recipient.getUserId()))
+                .requestId(requestData)
+                .channelId(UUID.fromString(recipient.getChannelId()));
+            notificationsToSend.add(notificationRepository.save(notification));
+        }
+        return notificationsToSend;
+    }
+
+    private void updateStatusNotifications(List<Notification> notificationsToSend, MessageStatus status) {
+        log.info("Update notifications status");
+        for (var notification : notificationsToSend) {
+            notification.status(status);
+            notificationRepository.save(notification);
+        }
+    }
+
+    private void createAndPublishNotifications(List<IUserRequestDataDTO> notifications, RequestDataDTO requestDataDTO) {
+        log.info("Publish notification to queue");
+        for (var notification : notifications) {
+            NotificationChannelDTO notificationQueue;
+            if (Channel.EMAIL.name().equals(notification.getChannel())) {
+                notificationQueue =
+                    new NotificationChannelDTO(
+                        notification.getChatId(),
+                        requestDataDTO.getContent(),
+                        Channel.EMAIL,
+                        requestDataDTO.getEmailSubject()
+                    );
+            } else {
+                notificationQueue =
+                    new NotificationChannelDTO(
+                        notification.getChatId(),
+                        requestDataDTO.getContent(),
+                        Channel.valueOf(notification.getChannel())
+                    );
+            }
+            notificationEventPublisher.publish(notificationQueue);
+        }
     }
 }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import SharedModule from 'app/shared/shared.module';
 import { User } from '../../entities/user/user.model';
@@ -9,9 +9,11 @@ import SortDirective from '../../shared/sort/sort.directive';
 import { ChannelToken, INotifySettings } from '../../entities/notify-settings/notify-settings.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import AddChannelDialogComponent from './add-channel/add-channel-dialog.component';
-import { ActiveChannel, Channel } from '../../entities/enumerations/channel.model';
+import { ActiveChannel } from '../../entities/enumerations/channel.model';
 import dayjs from 'dayjs/esm';
 import { QrCodeModalComponent } from './qr-code/qr-code.modal.component';
+import { NotifyChannelStatusEnum } from '../../entities/enumerations/notify-channel-status-enum.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'jhi-settings',
@@ -22,17 +24,22 @@ import { QrCodeModalComponent } from './qr-code/qr-code.modal.component';
 export default class SettingsComponent implements OnInit {
   success = false;
   userProfile: User | null = null;
+  editForm = this.fb.group({
+    code: new FormControl('', {
+      validators: [Validators.maxLength(6), Validators.required],
+    }),
+  });
   protected channels: string[] = Object.values(ActiveChannel);
 
   constructor(
     private accountService: AccountService,
     private modalService: NgbModal,
+    private router: Router,
+    protected fb: FormBuilder,
   ) {}
 
   ngOnInit(): void {
-    this.accountService.getUserProfile().subscribe(profile => {
-      this.userProfile = profile;
-    });
+    this.getUserProfile();
   }
 
   trackId = (_index: number, item: INotifySettings): string => item.id;
@@ -42,13 +49,17 @@ export default class SettingsComponent implements OnInit {
     // unsubscribe not needed because closed completes on modal close
     modalRef.closed.subscribe(reason => {
       if (reason) {
-        this.userProfile = reason;
+        this.getUserProfile();
       }
     });
   }
 
-  hasToken(channel: Channel, channelToken?: ChannelToken): boolean {
-    return channelToken != undefined && channel !== Channel.EMAIL && dayjs(channelToken.expirationTime).isAfter(new Date());
+  hasToken(notifySettings: INotifySettings): boolean {
+    return (
+      notifySettings.channelsToken != undefined &&
+      dayjs(notifySettings.channelsToken.expirationTime).isAfter(new Date()) &&
+      notifySettings.status !== NotifyChannelStatusEnum.ON
+    );
   }
 
   changeHidden(channelToken?: ChannelToken): void {
@@ -63,5 +74,20 @@ export default class SettingsComponent implements OnInit {
       modalRef.componentInstance.channel = channel;
       modalRef.closed.subscribe(() => {});
     }
+  }
+
+  sendEmailToken(): void {
+    const code = this.editForm.get('code')?.value;
+    if (code) {
+      this.accountService.emailActivate(code).subscribe(() => {
+        this.getUserProfile();
+      });
+    }
+  }
+
+  private getUserProfile(): void {
+    this.accountService.getUserProfile().subscribe(profile => {
+      this.userProfile = profile;
+    });
   }
 }

@@ -23,6 +23,11 @@ logging:
     dateformat: yyyy-MM-dd HH:mm:ss.SSS
 
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rmuser
+    password: rmpassword_utm
   devtools:
     restart:
       enabled: true

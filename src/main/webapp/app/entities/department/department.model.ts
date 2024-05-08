@@ -8,3 +8,8 @@ export interface IDepartment {
 }
 
 export type NewDepartment = Omit<IDepartment, 'id'> & { id: null };
+
+export enum DepartmentRouter {
+  ADMIN = 'departments',
+  USER = 'my-departments',
+}

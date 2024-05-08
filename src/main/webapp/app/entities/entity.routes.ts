@@ -7,6 +7,11 @@ const routes: Routes = [
     loadChildren: () => import('./department/department.routes'),
     title: 'inotificareApp.department.home.title',
   },
+  {
+    path: 'my-departments',
+    loadChildren: () => import('./department/department.routes'),
+    title: 'inotificareApp.department.home.title',
+  },
 ];
 
 export default routes;

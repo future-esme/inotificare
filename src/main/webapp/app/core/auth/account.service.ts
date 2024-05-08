@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import { shareReplay, tap, catchError } from 'rxjs/operators';
@@ -73,6 +73,12 @@ export class AccountService {
 
   getUserProfile(): Observable<User | null> {
     return this.http.get<User>(this.applicationConfigService.getEndpointFor('api/account/profile'));
+  }
+
+  emailActivate(token: string): Observable<any> {
+    let options: HttpParams = new HttpParams();
+    options = options.append('token', token);
+    return this.http.get(this.applicationConfigService.getEndpointFor('api/email/callback'), { params: options });
   }
 
   private fetch(): Observable<Account> {

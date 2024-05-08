@@ -37,4 +37,8 @@ public class NotificationEventPublisher implements InitializingBean {
     public void publishEmail(String receiver, String content, String subject) {
         publisher.publishEvent(new NotificationChannelDTO(receiver, content, Channel.EMAIL, subject));
     }
+
+    public void publish(NotificationChannelDTO notification) {
+        publisher.publishEvent(notification);
+    }
 }

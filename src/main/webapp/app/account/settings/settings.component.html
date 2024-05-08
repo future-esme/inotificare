@@ -52,13 +52,30 @@
                     }
                   </div>
                   <div class="col-sm-4">
-                    @if (hasToken(notifySettings.channel, notifySettings.channelsToken)) {
+                    @if (hasToken(notifySettings) && notifySettings.channel !== 'EMAIL') {
                       <button class="btn btn-info btn-sm" (click)="changeHidden(notifySettings.channelsToken)">
                         <fa-icon icon="eye"></fa-icon>
                       </button>
                       <span [hidden]="notifySettings.channelsToken?.isHidden == undefined || !notifySettings.channelsToken?.isHidden">
                         {{ notifySettings.channelsToken?.token }}
                       </span>
+                    }
+                    @if (hasToken(notifySettings) && notifySettings.channel === 'EMAIL') {
+                      <form name="editForm" [formGroup]="editForm" (ngSubmit)="sendEmailToken()">
+                        <div class="form-group" style="display: flex">
+                          <input
+                            type="number"
+                            class="form-control p-0 px-1"
+                            max="999999"
+                            placeholder="123456"
+                            formControlName="code"
+                            style="width: 50%"
+                          />
+                          <button [disabled]="editForm.invalid" type="submit" class="btn btn-sm btn-info ms-1">
+                            <fa-icon icon="save"></fa-icon>
+                          </button>
+                        </div>
+                      </form>
                     }
                   </div>
                 }

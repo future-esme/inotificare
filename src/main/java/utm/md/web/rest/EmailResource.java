@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import utm.md.service.EmailNotifySettingsService;
 
 @RestController
-@RequestMapping("/email/callback")
+@RequestMapping("/api/email/callback")
 public class EmailResource {
 
     private final Logger log = LoggerFactory.getLogger(EmailResource.class);

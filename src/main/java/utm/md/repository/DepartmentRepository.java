@@ -30,10 +30,12 @@ public interface DepartmentRepository
 
     @Query(
         value = """
-            select * from department
-            join rel_department__members rdm on department.id = rdm.department_id
-            where department.department_admin_id = :userId
-            or rdm.members_id = :userId
+            select * from (
+                select department.* from department
+                join rel_department__members rdm on department.id = rdm.department_id
+                where department.department_admin_id = :userId
+                or rdm.members_id = :userId
+            ) dep
         """,
         nativeQuery = true
     )

@@ -46,12 +46,29 @@
               <li>
                 <a class="dropdown-item" routerLink="/departments" routerLinkActive="active" (click)="collapseNavbar()">
                   <fa-icon icon="users" [fixedWidth]="true"></fa-icon>
-                  <span jhiTranslate="inotificareApp.department.home.title">User management</span>
+                  <span jhiTranslate="inotificareApp.department.home.title">Departamente</span>
                 </a>
               </li>
             </ul>
           </li>
         }
+        @if (account !== null) {
+          <li
+            ngbDropdown
+            class="nav-item dropdown pointer"
+            display="dynamic"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: true }"
+          >
+            <a class="nav-link" routerLink="/my-departments" (click)="collapseNavbar()" id="departments-option">
+              <span>
+                <fa-icon icon="users"></fa-icon>
+                <span jhiTranslate="inotificareApp.department.home.title">Departamente</span>
+              </span>
+            </a>
+          </li>
+        }
+
         <li
           *jhiHasAnyAuthority="'ROLE_ADMIN'"
           ngbDropdown

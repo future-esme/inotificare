@@ -5,17 +5,18 @@ import { combineLatest, filter, Observable, switchMap, tap } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
-import { SortDirective, SortByDirective } from 'app/shared/sort';
-import { DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe } from 'app/shared/date';
+import { SortByDirective, SortDirective } from 'app/shared/sort';
+import { DurationPipe, FormatMediumDatePipe, FormatMediumDatetimePipe } from 'app/shared/date';
 import { ItemCountComponent } from 'app/shared/pagination';
 import { FormsModule } from '@angular/forms';
 import { ITEMS_PER_PAGE, PAGE_HEADER, TOTAL_COUNT_RESPONSE_HEADER } from 'app/config/pagination.constants';
-import { ASC, DESC, SORT, ITEM_DELETED_EVENT, DEFAULT_SORT_DATA } from 'app/config/navigation.constants';
-import { FilterComponent, FilterOptions, IFilterOptions, IFilterOption } from 'app/shared/filter';
-import { IDepartment } from '../department.model';
+import { ASC, DEFAULT_SORT_DATA, DESC, ITEM_DELETED_EVENT, SORT } from 'app/config/navigation.constants';
+import { FilterComponent, FilterOptions, IFilterOption, IFilterOptions } from 'app/shared/filter';
+import { DepartmentRouter, IDepartment } from '../department.model';
 
-import { EntityArrayResponseType, DepartmentService } from '../service/department.service';
+import { DepartmentService, EntityArrayResponseType } from '../service/department.service';
 import { DepartmentDeleteDialogComponent } from '../delete/department-delete-dialog.component';
+import { RouterAccess } from '../router-access';
 
 @Component({
   standalone: true,
@@ -34,7 +35,7 @@ import { DepartmentDeleteDialogComponent } from '../delete/department-delete-dia
     ItemCountComponent,
   ],
 })
-export class DepartmentComponent implements OnInit {
+export class DepartmentComponent extends RouterAccess implements OnInit {
   departments?: IDepartment[];
   isLoading = false;
 
@@ -51,13 +52,14 @@ export class DepartmentComponent implements OnInit {
     protected activatedRoute: ActivatedRoute,
     public router: Router,
     protected modalService: NgbModal,
-  ) {}
+  ) {
+    super(router);
+  }
 
   trackId = (_index: number, item: IDepartment): string => this.departmentService.getDepartmentIdentifier(item);
 
   ngOnInit(): void {
     this.load();
-
     this.filters.filterChanges.subscribe(filterOptions => this.handleNavigation(1, this.predicate, this.ascending, filterOptions));
   }
 
@@ -140,7 +142,11 @@ export class DepartmentComponent implements OnInit {
     filterOptions?.forEach(filterOption => {
       queryObject[filterOption.name] = filterOption.values;
     });
-    return this.departmentService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+    if (this.isMyDepartments) {
+      return this.departmentService.queryMyDepartments(queryObject).pipe(tap(() => (this.isLoading = false)));
+    } else {
+      return this.departmentService.query(queryObject).pipe(tap(() => (this.isLoading = false)));
+    }
   }
 
   protected handleNavigation(page = this.page, predicate?: string, ascending?: boolean, filterOptions?: IFilterOption[]): void {

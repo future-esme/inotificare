@@ -13,7 +13,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import utm.md.service.dto.NotificationChannelDTO;
-import utm.md.service.dto.NotificationDTO;
+import utm.md.service.dto.NotificationShortDTO;
 import utm.md.service.dto.NotificationSubjectDTO;
 
 @Component
@@ -44,17 +44,17 @@ public class NotificationEventListener {
     private void sendToRabbit(NotificationChannelDTO event) {
         String exchange;
         String routingKey;
-        NotificationDTO eventToSend;
+        NotificationShortDTO eventToSend;
         switch (event.getChannel()) {
             case TELEGRAM -> {
                 exchange = TELEGRAM_EXCHANGE;
                 routingKey = TELEGRAM_ROUTING_KEY;
-                eventToSend = new NotificationDTO(event.getReceiver(), event.getMessage());
+                eventToSend = new NotificationShortDTO(event.getReceiver(), event.getMessage());
             }
             case VIBER -> {
                 exchange = VIBER_EXCHANGE;
                 routingKey = VIBER_ROUTING_KEY;
-                eventToSend = new NotificationDTO(event.getReceiver(), event.getMessage());
+                eventToSend = new NotificationShortDTO(event.getReceiver(), event.getMessage());
             }
             case EMAIL -> {
                 exchange = MAIL_EXCHANGE;

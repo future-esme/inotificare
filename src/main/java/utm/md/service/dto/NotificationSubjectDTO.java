@@ -1,6 +1,6 @@
 package utm.md.service.dto;
 
-public class NotificationSubjectDTO extends NotificationDTO {
+public class NotificationSubjectDTO extends NotificationShortDTO {
 
     private String subject;
 
