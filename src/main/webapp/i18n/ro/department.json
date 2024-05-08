@@ -2,25 +2,25 @@
   "inotificareApp": {
     "department": {
       "home": {
-        "title": "Departments",
+        "title": "Departamente",
         "refreshListLabel": "Refresh list",
-        "createLabel": "Creeare o nouă entitate Department",
-        "createOrEditLabel": "Creeare sau editare Department",
-        "notFound": "No Departments found"
+        "createLabel": "Adaugă departament",
+        "createOrEditLabel": "Creeare sau editare departament",
+        "notFound": "Nu au fost găsite departamente"
       },
-      "created": "A fost creată o nouă entitate Department cu identificatorul {{ param }}",
-      "updated": "Department cu identificatorul {{ param }} a fost actualizată",
-      "deleted": "Department cu identificatorul {{ param }} a fost ștearsă",
+      "created": "A fost creată o departament cu identificatorul {{ param }}",
+      "updated": "Departamentul cu identificatorul {{ param }} a fost actualizat",
+      "deleted": "Departamentul cu identificatorul {{ param }} a fost șters",
       "delete": {
-        "question": "Sunteți sigur că doriți să ștergeți Department {{ id }}?"
+        "question": "Sunteți sigur că doriți să ștergeți acest departament {{ id }}?"
       },
       "detail": {
-        "title": "Department"
+        "title": "Departament"
       },
-      "id": "Id",
-      "title": "Title",
-      "departmentAdmin": "Department Admin",
-      "members": "Members"
+      "id": "Identificator",
+      "title": "Denumire",
+      "departmentAdmin": "Administratorul departamentului",
+      "members": "Membrii"
     }
   }
 }

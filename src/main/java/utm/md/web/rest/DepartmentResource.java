@@ -1,7 +1,6 @@
 package utm.md.web.rest;
 
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -22,6 +21,7 @@ import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 import utm.md.domain.Department;
 import utm.md.repository.DepartmentRepository;
+import utm.md.security.SecurityUtils;
 import utm.md.service.DepartmentQueryService;
 import utm.md.service.DepartmentService;
 import utm.md.service.criteria.DepartmentCriteria;
@@ -85,13 +85,12 @@ public class DepartmentResource {
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated department,
      * or with status {@code 400 (Bad Request)} if the department is not valid,
      * or with status {@code 500 (Internal Server Error)} if the department couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
     @PutMapping("/{id}")
     public ResponseEntity<Department> updateDepartment(
         @PathVariable(value = "id", required = false) final UUID id,
         @Valid @RequestBody Department department
-    ) throws URISyntaxException {
+    ) {
         log.debug("REST request to update Department : {}, {}", id, department);
         if (department.getId() == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
@@ -109,42 +108,6 @@ public class DepartmentResource {
             .ok()
             .headers(HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, department.getId().toString()))
             .body(result);
-    }
-
-    /**
-     * {@code PATCH  /departments/:id} : Partial updates given fields of an existing department, field will ignore if it is null
-     *
-     * @param id the id of the department to save.
-     * @param department the department to update.
-     * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated department,
-     * or with status {@code 400 (Bad Request)} if the department is not valid,
-     * or with status {@code 404 (Not Found)} if the department is not found,
-     * or with status {@code 500 (Internal Server Error)} if the department couldn't be updated.
-     * @throws URISyntaxException if the Location URI syntax is incorrect.
-     */
-    @PatchMapping(value = "/{id}", consumes = { "application/json", "application/merge-patch+json" })
-    public ResponseEntity<Department> partialUpdateDepartment(
-        @PathVariable(value = "id", required = false) final UUID id,
-        @NotNull @RequestBody Department department
-    ) throws URISyntaxException {
-        log.debug("REST request to partial update Department partially : {}, {}", id, department);
-        if (department.getId() == null) {
-            throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
-        }
-        if (!Objects.equals(id, department.getId())) {
-            throw new BadRequestAlertException("Invalid ID", ENTITY_NAME, "idinvalid");
-        }
-
-        if (!departmentRepository.existsById(id)) {
-            throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
-        }
-
-        Optional<Department> result = departmentService.partialUpdate(department);
-
-        return ResponseUtil.wrapOrNotFound(
-            result,
-            HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, department.getId().toString())
-        );
     }
 
     /**
@@ -166,6 +129,14 @@ public class DepartmentResource {
         return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
+    @GetMapping("/my-departments")
+    public ResponseEntity<List<Department>> getMyDepartments(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to my Departments");
+        Page<Department> page = departmentService.findMyDepartments(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
+    }
+
     /**
      * {@code GET  /departments/count} : count all the departments.
      *
@@ -176,6 +147,18 @@ public class DepartmentResource {
     public ResponseEntity<Long> countDepartments(DepartmentCriteria criteria) {
         log.debug("REST request to count Departments by criteria: {}", criteria);
         return ResponseEntity.ok().body(departmentQueryService.countByCriteria(criteria));
+    }
+
+    @GetMapping("/add-member/{departmentId}/{userId}")
+    public ResponseEntity<Department> addMember(@PathVariable("departmentId") UUID departmentId, @PathVariable("userId") UUID userId) {
+        log.debug("REST to add member to department");
+        return ResponseEntity.ok().body(departmentService.addMember(departmentId, userId));
+    }
+
+    @GetMapping("/remove-member/{departmentId}/{userId}")
+    public ResponseEntity<Department> removeMember(@PathVariable("departmentId") UUID departmentId, @PathVariable("userId") UUID userId) {
+        log.debug("REST to remove member to department");
+        return ResponseEntity.ok().body(departmentService.removeMember(departmentId, userId));
     }
 
     /**

@@ -30,17 +30,23 @@ public class Notification implements Serializable {
 
     @JsonIgnoreProperties(value = { "notifySettings" }, allowSetters = true)
     @OneToOne
-    @JoinColumn
+    @JoinColumn(name = "recipient_id", insertable = false, updatable = false)
     private User recipient;
 
+    @Column(name = "recipient_id")
+    private UUID recipientId;
+
     @JsonIgnoreProperties(value = { "templateId", "notification" }, allowSetters = true)
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "request_id")
     private RequestData requestId;
 
     @OneToOne
-    @JoinColumn
+    @JoinColumn(name = "channel_id", insertable = false, updatable = false)
     private ChannelUserCredentials channel;
+
+    @Column(name = "channel_id")
+    private UUID channelId;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -93,6 +99,32 @@ public class Notification implements Serializable {
 
     public Notification recipient(User userInternal) {
         this.setRecipient(userInternal);
+        return this;
+    }
+
+    public UUID getRecipientId() {
+        return recipientId;
+    }
+
+    public void setRecipientId(UUID recipientId) {
+        this.recipientId = recipientId;
+    }
+
+    public Notification recipientId(UUID recipientId) {
+        this.recipientId = recipientId;
+        return this;
+    }
+
+    public UUID getChannelId() {
+        return channelId;
+    }
+
+    public void setChannelId(UUID channelId) {
+        this.channelId = channelId;
+    }
+
+    public Notification channelId(UUID channelId) {
+        this.channelId = channelId;
         return this;
     }
 

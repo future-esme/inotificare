@@ -44,7 +44,7 @@ export default class UserManagementComponent implements OnInit {
     this.handleNavigation();
   }
 
-  trackIdentity(_index: number, item: User): number {
+  trackIdentity(_index: number, item: User): string {
     return item.id!;
   }
 

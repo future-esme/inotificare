@@ -1,10 +1,15 @@
-import { IUserInternal } from 'app/entities/user-internal/user-internal.model';
+import { IUser } from '../../admin/user-management/user-management.model';
 
 export interface IDepartment {
   id: string;
   title?: string | null;
-  departmentAdmin?: IUserInternal | null;
-  members?: IUserInternal[] | null;
+  departmentAdmin?: IUser | null;
+  members?: IUser[] | null;
 }
 
 export type NewDepartment = Omit<IDepartment, 'id'> & { id: null };
+
+export enum DepartmentRouter {
+  ADMIN = 'departments',
+  USER = 'my-departments',
+}

@@ -13,6 +13,6 @@ export class RegisterService {
   ) {}
 
   save(registration: Registration): Observable<{}> {
-    return this.http.post(this.applicationConfigService.getEndpointFor('api/register'), registration);
+    return this.http.post(this.applicationConfigService.getEndpointFor('api/activate-login'), registration);
   }
 }

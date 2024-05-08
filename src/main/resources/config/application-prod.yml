@@ -26,6 +26,11 @@ management:
         enabled: false
 
 spring:
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: rmuser
+    password: rmpassword_utm
   devtools:
     restart:
       enabled: false
@@ -34,8 +39,8 @@ spring:
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     url: jdbc:postgresql://localhost:5432/inotificare
-    username: inotificare
-    password:
+    username: postgres
+    password: postgres
     hikari:
       poolName: Hikari
       auto-commit: false

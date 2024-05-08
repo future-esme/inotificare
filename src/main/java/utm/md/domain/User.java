@@ -25,8 +25,7 @@ public class User extends AbstractAuditingEntity<UUID> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue
     private UUID id;
 
     @NotNull
@@ -48,6 +47,14 @@ public class User extends AbstractAuditingEntity<UUID> implements Serializable {
     @Size(max = 50)
     @Column(name = "last_name", length = 50)
     private String lastName;
+
+    @JsonIgnore
+    @Column(name = "activated")
+    private Boolean activated;
+
+    @JsonIgnore
+    @Column(name = "activation_key")
+    private String activationKey;
 
     @JsonIgnore
     @ManyToMany
@@ -141,6 +148,23 @@ public class User extends AbstractAuditingEntity<UUID> implements Serializable {
         this.notifySettings.remove(notifySettings);
         notifySettings.setUserInternal(null);
         return this;
+    }
+
+    public Boolean getActivated() {
+        return activated;
+    }
+
+    public void setActivated(Boolean activated) {
+        this.activated = activated;
+    }
+
+    @JsonIgnore
+    public String getActivationKey() {
+        return activationKey;
+    }
+
+    public void setActivationKey(String activationKey) {
+        this.activationKey = activationKey;
     }
 
     @Override

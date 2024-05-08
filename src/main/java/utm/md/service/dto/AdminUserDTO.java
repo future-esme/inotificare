@@ -42,6 +42,8 @@ public class AdminUserDTO implements Serializable {
 
     private Set<String> authorities;
 
+    private String email;
+
     public AdminUserDTO() {
         // Empty constructor needed for Jackson.
     }
@@ -128,6 +130,14 @@ public class AdminUserDTO implements Serializable {
 
     public void setAuthorities(Set<String> authorities) {
         this.authorities = authorities;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     // prettier-ignore

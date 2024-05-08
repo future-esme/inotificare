@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse } from '@angular/common/http';
-import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import { finalize, map } from 'rxjs/operators';
 
 import SharedModule from 'app/shared/shared.module';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { IUserInternal } from 'app/entities/user-internal/user-internal.model';
-import { UserInternalService } from 'app/entities/user-internal/service/user-internal.service';
 import { IDepartment } from '../department.model';
+import { DepartmentFormGroup, DepartmentFormService } from './department-form.service';
 import { DepartmentService } from '../service/department.service';
-import { DepartmentFormService, DepartmentFormGroup } from './department-form.service';
+import { UserManagementService } from '../../../admin/user-management/service/user-management.service';
+import { ActivatedRoute } from '@angular/router';
+import { Observable } from 'rxjs';
+import { HttpResponse } from '@angular/common/http';
+import { finalize, map } from 'rxjs/operators';
+import { isPresent } from '../../../core/util/operators';
+import { IUser } from '../../../admin/user-management/user-management.model';
 
 @Component({
   standalone: true,
@@ -23,20 +23,17 @@ export class DepartmentUpdateComponent implements OnInit {
   isSaving = false;
   department: IDepartment | null = null;
 
-  userInternalsSharedCollection: IUserInternal[] = [];
-  departmentAdminsCollection: IUserInternal[] = [];
+  userInternalsSharedCollection: IUser[] = [];
+  departmentAdminsCollection: IUser[] = [];
 
   editForm: DepartmentFormGroup = this.departmentFormService.createDepartmentFormGroup();
 
   constructor(
     protected departmentService: DepartmentService,
     protected departmentFormService: DepartmentFormService,
-    protected userInternalService: UserInternalService,
+    protected userInternalService: UserManagementService,
     protected activatedRoute: ActivatedRoute,
   ) {}
-
-  compareUserInternal = (o1: IUserInternal | null, o2: IUserInternal | null): boolean =>
-    this.userInternalService.compareUserInternal(o1, o2);
 
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ department }) => {
@@ -86,11 +83,11 @@ export class DepartmentUpdateComponent implements OnInit {
     this.department = department;
     this.departmentFormService.resetForm(this.editForm, department);
 
-    this.userInternalsSharedCollection = this.userInternalService.addUserInternalToCollectionIfMissing<IUserInternal>(
+    this.userInternalsSharedCollection = this.addUserInternalToCollectionIfMissing<IUser>(
       this.userInternalsSharedCollection,
       ...(department.members ?? []),
     );
-    this.departmentAdminsCollection = this.userInternalService.addUserInternalToCollectionIfMissing<IUserInternal>(
+    this.departmentAdminsCollection = this.addUserInternalToCollectionIfMissing<IUser>(
       this.departmentAdminsCollection,
       department.departmentAdmin,
     );
@@ -99,22 +96,44 @@ export class DepartmentUpdateComponent implements OnInit {
   protected loadRelationshipsOptions(): void {
     this.userInternalService
       .query()
-      .pipe(map((res: HttpResponse<IUserInternal[]>) => res.body ?? []))
+      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
       .pipe(
-        map((userInternals: IUserInternal[]) =>
-          this.userInternalService.addUserInternalToCollectionIfMissing<IUserInternal>(userInternals, ...(this.department?.members ?? [])),
+        map((userInternals: IUser[]) =>
+          this.addUserInternalToCollectionIfMissing<IUser>(userInternals, ...(this.department?.members ?? [])),
         ),
       )
-      .subscribe((userInternals: IUserInternal[]) => (this.userInternalsSharedCollection = userInternals));
+      .subscribe((userInternals: IUser[]) => (this.userInternalsSharedCollection = userInternals));
 
     this.userInternalService
-      .query({ 'departmentId.specified': 'false' })
-      .pipe(map((res: HttpResponse<IUserInternal[]>) => res.body ?? []))
+      .query()
+      .pipe(map((res: HttpResponse<IUser[]>) => res.body ?? []))
       .pipe(
-        map((userInternals: IUserInternal[]) =>
-          this.userInternalService.addUserInternalToCollectionIfMissing<IUserInternal>(userInternals, this.department?.departmentAdmin),
-        ),
+        map((userInternals: IUser[]) => this.addUserInternalToCollectionIfMissing<IUser>(userInternals, this.department?.departmentAdmin)),
       )
-      .subscribe((userInternals: IUserInternal[]) => (this.departmentAdminsCollection = userInternals));
+      .subscribe((userInternals: IUser[]) => (this.departmentAdminsCollection = userInternals));
+  }
+
+  addUserInternalToCollectionIfMissing<Type extends Pick<IUser, 'id'>>(
+    userCollection: Type[],
+    ...usersToCheck: (Type | null | undefined)[]
+  ): Type[] {
+    const users: Type[] = usersToCheck.filter(isPresent);
+    if (users.length > 0) {
+      const userCollectionIdentifiers = userCollection.map(departmentItem => this.getUserIdentifier(departmentItem)!);
+      const usersToAdd = users.filter(departmentItem => {
+        const userIdentifier = this.getUserIdentifier(departmentItem);
+        if (userCollectionIdentifiers.includes(userIdentifier)) {
+          return false;
+        }
+        userCollectionIdentifiers.push(userIdentifier);
+        return true;
+      });
+      return [...usersToAdd, ...userCollection];
+    }
+    return userCollection;
+  }
+
+  private getUserIdentifier(user: IUser): string {
+    return user.id!;
   }
 }

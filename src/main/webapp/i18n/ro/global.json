@@ -1,6 +1,6 @@
 {
   "global": {
-    "title": "Inotificare",
+    "title": "INotificare",
     "browsehappy": "Folosiți un browser <strong>vechi</strong>. Va rugăm <a href=\"http://browsehappy.com/?locale=en\"> să îl actualizați</a> pentru o experiență îmbunătațită.",
     "menu": {
       "home": "Acasă",
@@ -19,7 +19,8 @@
         "sessions": "Sesiuni",
         "login": "Autentificare",
         "logout": "Ieșire",
-        "register": "Înregistrare"
+        "register": "Înregistrare",
+        "firstLogin": "Utilizator nou"
       },
       "admin": {
         "main": "Administrare",
@@ -50,8 +51,8 @@
       "newpassword.placeholder": "Parolă nouă",
       "confirmpassword.label": "Confirma parolă",
       "confirmpassword.placeholder": "Confirmați noua parolă",
-      "email.label": "Email",
-      "email.placeholder": "Emailul dumneavoastră"
+      "email.label": "Cheia de activare",
+      "email.placeholder": "Cheia dumneavoastră de activare"
     },
     "messages": {
       "info": {
@@ -85,6 +86,12 @@
           "invalid": "Email invalid.",
           "minlength": "Emailul dumneavoastră trebuie să aibă cel puțin 5 caractere",
           "maxlength": "Emailul dumneavoastră nu poate avea mai mult de 50 de caractere."
+        },
+        "activationKey": {
+          "required": "Cheia dumneavoastra de activare este necesara.",
+          "invalid": "Cheie de activare invalida.",
+          "minlength": "Cheie de activare a dumneavoastră trebuie să aibă cel puțin 6 caractere",
+          "maxlength": "Cheie de activare dumneavoastră nu poate avea mai mult de 6 de caractere."
         }
       }
     },
@@ -151,5 +158,18 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "Acesta este subsolul paginii dumneavoastră"
+  "footer": {
+    "copyright": "© 2024 Echipa INotificare",
+    "maintainers": "Creat și menținut de ",
+    "maintainerList": {
+      "first": {
+        "name": "Tulbu Gabriela",
+        "link": "https://www.linkedin.com/in/tulbu-gabriela-908ab11ba/"
+      },
+      "second": {
+        "name": "Munteanu Iulian",
+        "link": "https://www.linkedin.com/in/munteanu-iulian-08526b263/"
+      }
+    }
+  }
 }

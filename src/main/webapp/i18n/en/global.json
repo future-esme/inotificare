@@ -16,7 +16,8 @@
         "sessions": "Sessions",
         "login": "Sign in",
         "logout": "Sign out",
-        "register": "Register"
+        "register": "Register",
+        "firstLogin": "New user"
       },
       "admin": {
         "main": "Administration",
@@ -41,8 +42,8 @@
       "newpassword.placeholder": "New password",
       "confirmpassword.label": "New password confirmation",
       "confirmpassword.placeholder": "Confirm the new password",
-      "email.label": "Email",
-      "email.placeholder": "Your email"
+      "email.label": "Activation key",
+      "email.placeholder": "Your activation key"
     },
     "messages": {
       "info": {
@@ -143,5 +144,18 @@
       "not.image": "File was expected to be an image but was found to be \"{{ fileType }}\""
     }
   },
-  "footer": "This is your footer"
+  "footer": {
+    "copyright": "© 2024 Echipa INotificare",
+    "maintainers": "Creat și menținut de ",
+    "maintainerList": {
+      "first": {
+        "name": "Tulbu Gabriela",
+        "link": "https://www.linkedin.com/in/tulbu-gabriela-908ab11ba/"
+      },
+      "second": {
+        "name": "Munteanu Iulian",
+        "link": "https://www.linkedin.com/in/munteanu-iulian-08526b263/"
+      }
+    }
+  }
 }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { TranslateService } from '@ngx-translate/core';
 import { Observable, ReplaySubject, of } from 'rxjs';
 import { shareReplay, tap, catchError } from 'rxjs/operators';
@@ -8,6 +8,7 @@ import { shareReplay, tap, catchError } from 'rxjs/operators';
 import { StateStorageService } from 'app/core/auth/state-storage.service';
 import { Account } from 'app/core/auth/account.model';
 import { ApplicationConfigService } from '../config/application-config.service';
+import { User } from '../../entities/user/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class AccountService {
@@ -22,10 +23,6 @@ export class AccountService {
     private router: Router,
     private applicationConfigService: ApplicationConfigService,
   ) {}
-
-  save(account: Account): Observable<{}> {
-    return this.http.post(this.applicationConfigService.getEndpointFor('api/account'), account);
-  }
 
   authenticate(identity: Account | null): void {
     this.userIdentity = identity;
@@ -72,6 +69,16 @@ export class AccountService {
 
   getAuthenticationState(): Observable<Account | null> {
     return this.authenticationState.asObservable();
+  }
+
+  getUserProfile(): Observable<User | null> {
+    return this.http.get<User>(this.applicationConfigService.getEndpointFor('api/account/profile'));
+  }
+
+  emailActivate(token: string): Observable<any> {
+    let options: HttpParams = new HttpParams();
+    options = options.append('token', token);
+    return this.http.get(this.applicationConfigService.getEndpointFor('api/email/callback'), { params: options });
   }
 
   private fetch(): Observable<Account> {

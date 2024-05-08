@@ -1,3 +1,21 @@
+<!-- Remove the container if you want to extend the Footer to full width. -->
 <div class="footer">
-  <p jhiTranslate="footer">This is your footer</p>
+  <!-- Footer -->
+  <div class="text-center text-lg-start text-dark" style="background-color: #eceff1">
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
+      <span jhiTranslate="footer.copyright"></span><br />
+      <span>{{ 'footer.maintainers' | translate }}</span>
+      <a class="text-dark" href="https://www.linkedin.com/in/tulbu-gabriela-908ab11ba/">{{
+        'footer.maintainerList.first.name' | translate
+      }}</a
+      >,
+      <a class="text-dark" href="https://www.linkedin.com/in/munteanu-iulian-08526b263/">{{
+        'footer.maintainerList.second.name' | translate
+      }}</a>
+    </div>
+    <!-- Copyright -->
+  </div>
+  <!-- Footer -->
 </div>
+<!-- End of .container -->

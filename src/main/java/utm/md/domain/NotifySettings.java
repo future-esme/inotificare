@@ -38,6 +38,9 @@ public class NotifySettings implements Serializable {
     @JsonIgnoreProperties(value = { "notifySettings" }, allowSetters = true)
     private User userInternal;
 
+    @OneToOne(mappedBy = "notifySettings")
+    private ChannelsToken channelsToken;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public UUID getId() {
@@ -103,6 +106,14 @@ public class NotifySettings implements Serializable {
     public NotifySettings userInternal(User userInternal) {
         this.setUserInternal(userInternal);
         return this;
+    }
+
+    public ChannelsToken getChannelsToken() {
+        return channelsToken;
+    }
+
+    public void setChannelsToken(ChannelsToken channelsToken) {
+        this.channelsToken = channelsToken;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

@@ -31,12 +31,6 @@ export class DepartmentService {
     });
   }
 
-  partialUpdate(department: PartialUpdateDepartment): Observable<EntityResponseType> {
-    return this.http.patch<IDepartment>(`${this.resourceUrl}/${this.getDepartmentIdentifier(department)}`, department, {
-      observe: 'response',
-    });
-  }
-
   find(id: string): Observable<EntityResponseType> {
     return this.http.get<IDepartment>(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
@@ -46,35 +40,16 @@ export class DepartmentService {
     return this.http.get<IDepartment[]>(this.resourceUrl, { params: options, observe: 'response' });
   }
 
+  queryMyDepartments(req?: any): Observable<EntityArrayResponseType> {
+    const options = createRequestOption(req);
+    return this.http.get<IDepartment[]>(`${this.resourceUrl}/my-departments`, { params: options, observe: 'response' });
+  }
+
   delete(id: string): Observable<HttpResponse<{}>> {
     return this.http.delete(`${this.resourceUrl}/${id}`, { observe: 'response' });
   }
 
   getDepartmentIdentifier(department: Pick<IDepartment, 'id'>): string {
     return department.id;
-  }
-
-  compareDepartment(o1: Pick<IDepartment, 'id'> | null, o2: Pick<IDepartment, 'id'> | null): boolean {
-    return o1 && o2 ? this.getDepartmentIdentifier(o1) === this.getDepartmentIdentifier(o2) : o1 === o2;
-  }
-
-  addDepartmentToCollectionIfMissing<Type extends Pick<IDepartment, 'id'>>(
-    departmentCollection: Type[],
-    ...departmentsToCheck: (Type | null | undefined)[]
-  ): Type[] {
-    const departments: Type[] = departmentsToCheck.filter(isPresent);
-    if (departments.length > 0) {
-      const departmentCollectionIdentifiers = departmentCollection.map(departmentItem => this.getDepartmentIdentifier(departmentItem)!);
-      const departmentsToAdd = departments.filter(departmentItem => {
-        const departmentIdentifier = this.getDepartmentIdentifier(departmentItem);
-        if (departmentCollectionIdentifiers.includes(departmentIdentifier)) {
-          return false;
-        }
-        departmentCollectionIdentifiers.push(departmentIdentifier);
-        return true;
-      });
-      return [...departmentsToAdd, ...departmentCollection];
-    }
-    return departmentCollection;
   }
 }

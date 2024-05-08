@@ -7,6 +7,7 @@ import { AccountService } from 'app/core/auth/account.service';
 import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 import FooterComponent from '../footer/footer.component';
 import PageRibbonComponent from '../profiles/page-ribbon.component';
+import SharedModule from '../../shared/shared.module';
 
 @Component({
   selector: 'jhi-main',

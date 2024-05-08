@@ -1,0 +1,19 @@
+@if (channel) {
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'settings.qrCode.modal.title' | translate }} {{ 'settings.qrCode.channels.' + channel | translate }}</h4>
+  </div>
+
+  <div class="modal-body">
+    <jhi-alert-error></jhi-alert-error>
+    <p jhiTranslate="settings.qrCode.info"></p>
+    @if (imageUrl) {
+      <img [src]="imageUrl" alt="avatar" class="img-fluid" />
+    }
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Cancel</span>
+    </button>
+  </div>
+}

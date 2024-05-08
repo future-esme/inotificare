@@ -1,51 +1,59 @@
-<div class="d-flex justify-content-center">
-  <div class="col-8">
+<section style="background-color: #eee">
+  <div class="container py-3">
     @if (department) {
-      <div>
-        <h2 data-cy="departmentDetailsHeading"><span jhiTranslate="inotificareApp.department.detail.title">Department</span></h2>
-
-        <hr />
-
-        <jhi-alert-error></jhi-alert-error>
-
-        <jhi-alert></jhi-alert>
-
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="inotificareApp.department.id">Id</span></dt>
-          <dd>
-            <span>{{ department.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="inotificareApp.department.title">Title</span></dt>
-          <dd>
-            <span>{{ department.title }}</span>
-          </dd>
-          <dt><span jhiTranslate="inotificareApp.department.departmentAdmin">Department Admin</span></dt>
-          <dd>
-            @if (department.departmentAdmin) {
-              <div>
-                <a [routerLink]="['/user-internal', department.departmentAdmin.id, 'view']">{{ department.departmentAdmin.id }}</a>
+      <div class="row pb-2">
+        <div class="col justify-content-center d-flex">
+          <h3><span jhiTranslate="inotificareApp.department.detail.title">User</span></h3>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-4">
+          <div class="card mb-4">
+            <div class="card-body text-center">
+              <img src="content/images/avatar_department.webp" alt="avatar" class="rounded-circle img-fluid" style="width: 150px" />
+              <h5 class="my-3">{{ department.title }}</h5>
+              <p class="mb-1">
+                <span>{{ department.departmentAdmin?.firstName + ' ' + department.departmentAdmin?.lastName }}</span
+                ><br />
+                <span jhiTranslate="inotificareApp.department.departmentAdmin" class="text-muted">Department Admin</span>
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8">
+          <div class="card mb-4">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-12">
+                  <h5 class="mb-0" jhiTranslate="inotificareApp.department.members"></h5>
+                </div>
+                @for (members of department.members; track $index; let last = $last) {
+                  <hr />
+                  <div class="col-sm-8">
+                    <a class="mb-0 text-dark" [routerLink]="['/admin/user-management', members.login, 'view']">{{
+                      members.lastName + ' ' + members.firstName
+                    }}</a>
+                  </div>
+                }
               </div>
-            }
-          </dd>
-          <dt><span jhiTranslate="inotificareApp.department.members">Members</span></dt>
-          <dd>
-            @for (members of department.members; track $index; let last = $last) {
-              <span>
-                <a [routerLink]="['/user-internal', members.id, 'view']">{{ members.id }}</a
-                >{{ last ? '' : ', ' }}
-              </span>
-            }
-          </dd>
-        </dl>
-
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
-        </button>
-
-        <button type="button" [routerLink]="['/department', department.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
-        </button>
+            </div>
+          </div>
+          <div class="mb-3">
+            <div class="text-center">
+              <button type="submit" routerLink="../../" class="btn btn-info">
+                <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Back</span>
+              </button>
+              @if (!isMyDepartments) {
+                <button type="button" [routerLink]="['/departments', department.id, 'edit']" class="btn btn-primary">
+                  <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
+                </button>
+              }
+            </div>
+          </div>
+          <jhi-alert-error></jhi-alert-error>
+          <jhi-alert></jhi-alert>
+        </div>
       </div>
     }
   </div>
-</div>
+</section>

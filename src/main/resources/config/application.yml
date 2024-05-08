@@ -61,7 +61,7 @@ management:
       enabled: true
   health:
     mail:
-      enabled: false # When using the MailService, configure an SMTP server and set this to true
+      enabled: true # When using the MailService, configure an SMTP server and set this to true
   prometheus:
     metrics:
       export:
@@ -210,6 +210,11 @@ jhipster:
 # ===================================================================
 
 application:
-  tokens:
-    telegram: bot6836857631:AAFjIt4PTsGmhtu0DYNoDe352wIDGi66Qmg
-    viber: 522fcae37ce7e2c0-b88dd7e1584713a-b652d65e21b095cf
+  minio:
+    uri: http://127.0.0.1:9000
+    access-key: access_key
+    secret-key: secret_key
+    bucket-name: qr-code
+    qr-code:
+      telegram: qrcode_telegram_inotificare.png
+      viber: qrcode_viber_inotificare.png

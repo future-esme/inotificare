@@ -9,3 +9,11 @@ export enum Channel {
 
   FACEBOOK = 'FACEBOOK',
 }
+
+export enum ActiveChannel {
+  EMAIL = 'EMAIL',
+
+  TELEGRAM = 'TELEGRAM',
+
+  VIBER = 'VIBER',
+}

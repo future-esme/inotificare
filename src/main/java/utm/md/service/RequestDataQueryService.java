@@ -122,7 +122,7 @@ public class RequestDataQueryService extends QueryService<RequestData> {
                     specification.and(
                         buildSpecification(
                             criteria.getNotificationId(),
-                            root -> root.join(RequestData_.notification, JoinType.LEFT).get(Notification_.id)
+                            root -> root.join(RequestData_.notifications, JoinType.LEFT).get(Notification_.id)
                         )
                     );
             }

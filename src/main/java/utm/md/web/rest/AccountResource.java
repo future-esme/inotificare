@@ -5,8 +5,9 @@ import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import tech.jhipster.web.util.ResponseUtil;
 import utm.md.domain.User;
 import utm.md.repository.UserRepository;
 import utm.md.security.SecurityUtils;
@@ -15,7 +16,6 @@ import utm.md.service.dto.AdminUserDTO;
 import utm.md.service.dto.PasswordChangeDTO;
 import utm.md.web.rest.errors.EmailAlreadyUsedException;
 import utm.md.web.rest.errors.InvalidPasswordException;
-import utm.md.web.rest.errors.LoginAlreadyUsedException;
 import utm.md.web.rest.vm.ManagedUserVM;
 
 /**
@@ -44,23 +44,6 @@ public class AccountResource {
     }
 
     /**
-     * {@code POST  /register} : register the user.
-     *
-     * @param managedUserVM the managed user View Model.
-     * @throws InvalidPasswordException {@code 400 (Bad Request)} if the password is incorrect.
-     * @throws EmailAlreadyUsedException {@code 400 (Bad Request)} if the email is already used.
-     * @throws LoginAlreadyUsedException {@code 400 (Bad Request)} if the login is already used.
-     */
-    @PostMapping("/register")
-    @ResponseStatus(HttpStatus.CREATED)
-    public void registerAccount(@Valid @RequestBody ManagedUserVM managedUserVM) {
-        if (isPasswordLengthInvalid(managedUserVM.getPassword())) {
-            throw new InvalidPasswordException();
-        }
-        User user = userService.registerUser(managedUserVM, managedUserVM.getPassword());
-    }
-
-    /**
      * {@code GET  /account} : get the current user.
      *
      * @return the current user.
@@ -72,6 +55,19 @@ public class AccountResource {
             .getUserWithAuthorities()
             .map(AdminUserDTO::new)
             .orElseThrow(() -> new AccountResourceException("User could not be found"));
+    }
+
+    /**
+     * {@code GET  /account} : get the current user.
+     *
+     * @return the current user.
+     * @throws RuntimeException {@code 500 (Internal Server Error)} if the user couldn't be returned.
+     */
+    @GetMapping("/account/profile")
+    public ResponseEntity<User> getMyProfile() {
+        log.debug("Get my profile, for current authenticated user");
+        var user = userService.getUserProfileWithAuthorities();
+        return ResponseUtil.wrapOrNotFound(user);
     }
 
     /**
@@ -87,7 +83,7 @@ public class AccountResource {
             .getCurrentUserLogin()
             .orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<User> user = userRepository.findOneByLogin(userLogin);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new AccountResourceException("User could not be found");
         }
         userService.updateUser(userDTO.getFirstName(), userDTO.getLastName());

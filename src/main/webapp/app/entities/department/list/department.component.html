@@ -1,24 +1,21 @@
 <div>
-  <h2 id="page-heading" data-cy="DepartmentHeading">
+  <h3 id="page-heading" data-cy="DepartmentHeading">
     <span jhiTranslate="inotificareApp.department.home.title">Departments</span>
 
-    <div class="d-flex justify-content-end">
-      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
-        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
-        <span jhiTranslate="inotificareApp.department.home.refreshListLabel">Refresh list</span>
-      </button>
-
-      <button
-        id="jh-create-entity"
-        data-cy="entityCreateButton"
-        class="btn btn-primary jh-create-entity create-department"
-        [routerLink]="['/department/new']"
-      >
-        <fa-icon icon="plus"></fa-icon>
-        <span jhiTranslate="inotificareApp.department.home.createLabel">Create a new Department</span>
-      </button>
-    </div>
-  </h2>
+    @if (!isMyDepartments) {
+      <div class="d-flex float-end">
+        <button
+          id="jh-create-entity"
+          data-cy="entityCreateButton"
+          class="btn btn-primary jh-create-entity create-department"
+          [routerLink]="['/departments/new']"
+        >
+          <fa-icon icon="plus"></fa-icon>
+          <span jhiTranslate="inotificareApp.department.home.createLabel">Create a new Department</span>
+        </button>
+      </div>
+    }
+  </h3>
 
   <jhi-alert-error></jhi-alert-error>
 
@@ -37,13 +34,6 @@
       <table class="table table-striped" aria-describedby="page-heading">
         <thead>
           <tr jhiSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
-            <th scope="col" jhiSortBy="id">
-              <div class="d-flex">
-                <span jhiTranslate="inotificareApp.department.id">Id</span>
-
-                <fa-icon class="p-1" icon="sort"></fa-icon>
-              </div>
-            </th>
             <th scope="col" jhiSortBy="title">
               <div class="d-flex">
                 <span jhiTranslate="inotificareApp.department.title">Title</span>
@@ -51,7 +41,7 @@
                 <fa-icon class="p-1" icon="sort"></fa-icon>
               </div>
             </th>
-            <th scope="col" jhiSortBy="departmentAdmin.id">
+            <th scope="col" jhiSortBy="department_admin_id">
               <div class="d-flex">
                 <span jhiTranslate="inotificareApp.department.departmentAdmin">Department Admin</span>
                 <fa-icon class="p-1" icon="sort"></fa-icon>
@@ -63,33 +53,32 @@
         <tbody>
           @for (department of departments; track trackId) {
             <tr data-cy="entityTable">
-              <td>
-                <a [routerLink]="['/department', department.id, 'view']">{{ department.id }}</a>
-              </td>
               <td>{{ department.title }}</td>
               <td>
                 @if (department.departmentAdmin) {
                   <div>
-                    <a [routerLink]="['/user-internal', department.departmentAdmin.id, 'view']">{{ department.departmentAdmin.id }}</a>
+                    {{ department.departmentAdmin.firstName + ' ' + department.departmentAdmin.lastName }}
                   </div>
                 }
               </td>
               <td class="text-end">
                 <div class="btn-group">
-                  <a [routerLink]="['/department', department.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                  <a [routerLink]="['/', viewRouterLink, department.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
                     <fa-icon icon="eye"></fa-icon>
                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">View</span>
                   </a>
 
-                  <a [routerLink]="['/department', department.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
-                    <fa-icon icon="pencil-alt"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
-                  </a>
+                  @if (!isMyDepartments) {
+                    <a [routerLink]="['/departments', department.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                      <fa-icon icon="pencil-alt"></fa-icon>
+                      <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Edit</span>
+                    </a>
 
-                  <button type="submit" (click)="delete(department)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
-                    <fa-icon icon="times"></fa-icon>
-                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
-                  </button>
+                    <button type="submit" (click)="delete(department)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                      <fa-icon icon="times"></fa-icon>
+                      <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Delete</span>
+                    </button>
+                  }
                 </div>
               </td>
             </tr>

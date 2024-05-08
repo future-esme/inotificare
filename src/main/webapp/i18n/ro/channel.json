@@ -2,11 +2,11 @@
   "inotificareApp": {
     "Channel": {
       "null": "",
-      "DEFAULT": "DEFAULT",
-      "EMAIL": "EMAIL",
-      "TELEGRAM": "TELEGRAM",
-      "VIBER": "VIBER",
-      "FACEBOOK": "FACEBOOK"
+      "DEFAULT": "Neconfigurat",
+      "EMAIL": "Email",
+      "TELEGRAM": "Telegram",
+      "VIBER": "Viber",
+      "FACEBOOK": "Facebook"
     }
   }
 }
